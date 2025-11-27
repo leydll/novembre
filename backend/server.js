@@ -1,21 +1,28 @@
 require('dotenv').config();
 const express = require('express');
+const cors = require('cors');
 const pool = require('./config/database'); 
+const authRoutes = require('./routes/auth');
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
-app.get('/', async (req, res) => {
-  try {
-    const [rows] = await pool.query('SELECT 1 + 1 AS solution');
-    res.json({ result: rows[0].solution });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+// middlewares
+app.use(cors());
+app.use(express.json());
+
+app.use((req, res, next) => {
+    console.log(req.method, req.url, req.body);
+    next();
 });
 
-pool.getConnection()
-  .then(() => console.log("Connecté à la base de données"))
-  .catch(err => console.error("Erreur de connexion à la base de données :", err));
+// routes
+app.use('/auth', authRoutes);
 
-app.listen(PORT, () => console.log(`Serveur démarré sur le port ${PORT}`));
+// test de connexion à la base
+pool.getConnection()
+  .then(() => console.log("connecté à la base de données"))
+  .catch(err => console.error("erreur de connexion :", err));
+
+// démarrage serveur
+app.listen(PORT, () => console.log(`serveur démarré sur le port ${PORT}`));
