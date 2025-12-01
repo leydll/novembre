@@ -6,19 +6,6 @@ const jwt = require("jsonwebtoken");
 exports.register = async (req, res) => {
     const { username, email, password, role = "user" } = req.body;
 
-    // Validation simple
-    if (!username || !email || !password) {
-        return res.status(400).json({ message: "Tous les champs sont requis" });
-    }
-
-    if (password.length < 6) {
-        return res.status(400).json({ message: "Le mot de passe doit faire au moins 6 caractères" });
-    }
-
-    if (!email.includes("@")) {
-        return res.status(400).json({ message: "Email invalide" });
-    }
-
     try {
         // Vérifier si l'utilisateur existe déjà
         const [existing] = await pool.query("SELECT * FROM users WHERE email = ?", [email]);
@@ -96,10 +83,6 @@ exports.me = async (req, res) => {
 exports.updateMe = async (req, res) => {
     const userId = req.user.id;
     const { username, email, password } = req.body;
-
-    if (!username || !email) {
-        return res.status(400).json({ message: "Nom d'utilisateur et email sont requis" });
-    }
 
     try {
         // Vérifier que l'email n'est pas déjà utilisé par un autre utilisateur

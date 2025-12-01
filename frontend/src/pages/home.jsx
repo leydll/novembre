@@ -12,26 +12,31 @@ export default function Home({ user }) {
   }, []);
 
   return (
-    <div>
-      <h1>
-        {user ? `Bienvenue ${user.username} 👋` : "Bienvenue sur Mon blog de recettes"}
+    <main>
+      <h1 className="page-title">
+        {user ? `Bienvenue ${user.username} 👋` : "Bienvenue sur PinRecettes"}
       </h1>
-      <p>
+      <p className="page-subtitle">
         {user
-          ? "Voici quelques recettes populaires, vous pouvez en découvrir encore plus dans la page Recettes."
+          ? "Voici quelques recettes populaires, épinglées juste pour vous."
           : "Inscrivez-vous ou connectez-vous pour accéder à toutes les recettes et fonctionnalités."}
       </p>
       <h2>Recettes populaires</h2>
-      {recipes.map(r => (
-        <div key={r.id}>
-          <Link to={`/recipes/${r.id}`}>{r.title}</Link>
-          {typeof r.likes_count !== "undefined" && (
-            <span style={{ marginLeft: "10px", fontSize: "0.9rem" }}>
-              ❤️ {r.likes_count}
-            </span>
-          )}
-        </div>
-      ))}
-    </div>
+      <div className="recipes-grid">
+        {recipes.map((r) => (
+          <article key={r.id} className="recipe-card">
+            <h3 className="recipe-card-title">
+              <Link to={`/recipes/${r.id}`}>{r.title}</Link>
+            </h3>
+            <div className="recipe-card-meta">
+              <span className="chip-small">
+                ❤️ {r.likes_count ?? 0}
+              </span>
+              <span className="chip-small">Populaire</span>
+            </div>
+          </article>
+        ))}
+      </div>
+    </main>
   );
 }

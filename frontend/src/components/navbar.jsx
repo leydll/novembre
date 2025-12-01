@@ -9,35 +9,50 @@ export default function Navbar({ user, setUser }) {
     navigate("/login");
   };
 
+  const handleSearchKeyDown = (e) => {
+    if (e.key === "Enter") {
+      const value = e.target.value.trim();
+      if (value) {
+        navigate(`/search?q=${encodeURIComponent(value)}`);
+      }
+    }
+  };
+
   return (
-    <nav style={{ display: "flex", gap: "15px", padding: "10px", borderBottom: "1px solid #ccc" }}>
-      <Link to="/">Accueil</Link>
-      <Link to="/recipes">Recettes</Link>
-      {user && <Link to="/profile">Profil</Link>}
+    <header className="app-shell">
+      <nav className="navbar">
+        <div className="navbar-left">
+          <Link to="/" className="navbar-logo">PinRecettes</Link>
+          <Link to="/recipes" className="navbar-link">Recettes</Link>
+          {user && <Link to="/profile" className="navbar-link">Profil</Link>}
+          {user?.role === "admin" && (
+            <Link to="/admin/create" className="navbar-link">Ajouter recette</Link>
+          )}
+        </div>
 
-      <input 
-        type="text" 
-        placeholder="Rechercher..." 
-        onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            navigate(`/search?q=${e.target.value}`);
-          }
-        }} 
-        style={{ marginLeft: "auto" }}
-      />
+        <div className="navbar-center">
+          <input
+            type="text"
+            className="navbar-search input-rounded"
+            placeholder="Rechercher une recette..."
+            onKeyDown={handleSearchKeyDown}
+          />
+        </div>
 
-      {user ? (
-        <>
-          {user.role === "admin" && <Link to="/admin/create">Ajouter recette</Link>}
-          <span>{user.username}</span>
-          <button onClick={handleLogout}>Déconnexion</button>
-        </>
-      ) : (
-        <>
-          <Link to="/login">Connexion</Link>
-          <Link to="/register">Inscription</Link>
-        </>
-      )}
-    </nav>
+        <div className="navbar-right">
+          {user ? (
+            <>
+              <span className="navbar-username">{user.username}</span>
+              <button className="btn-ghost" onClick={handleLogout}>Déconnexion</button>
+            </>
+          ) : (
+            <>
+              <Link to="/login" className="navbar-link">Connexion</Link>
+              <Link to="/register" className="btn-primary">Inscription</Link>
+            </>
+          )}
+        </div>
+      </nav>
+    </header>
   );
 }

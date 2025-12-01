@@ -12,18 +12,26 @@ export default function Recipes() {
   }, []);
 
   return (
-    <div>
-      <h1>Liste des recettes</h1>
-      {recipes.map(r => (
-        <div key={r.id}>
-          <Link to={`/recipes/${r.id}`}>{r.title}</Link>
-          {typeof r.likes_count !== "undefined" && (
-            <span style={{ marginLeft: "10px", fontSize: "0.9rem" }}>
-              ❤️ {r.likes_count}
-            </span>
-          )}
-        </div>
-      ))}
-    </div>
+    <main>
+      <h1 className="page-title">Toutes les recettes</h1>
+      <p className="page-subtitle">Découvrez toutes les douceurs épinglées sur PinRecettes.</p>
+      <div className="recipes-grid">
+        {recipes.map((r) => (
+          <article key={r.id} className="recipe-card">
+            <h2 className="recipe-card-title">
+              <Link to={`/recipes/${r.id}`}>{r.title}</Link>
+            </h2>
+            <div className="recipe-card-meta">
+              <span className="chip-small">
+                ❤️ {r.likes_count ?? 0}
+              </span>
+              <span className="chip-small">
+                #{r.id}
+              </span>
+            </div>
+          </article>
+        ))}
+      </div>
+    </main>
   );
 }
