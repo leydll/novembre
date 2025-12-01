@@ -17,6 +17,11 @@ export default function Recipes() {
       {recipes.map(r => (
         <div key={r.id}>
           <Link to={`/recipes/${r.id}`}>{r.title}</Link>
+          {typeof r.likes_count !== "undefined" && (
+            <span style={{ marginLeft: "10px", fontSize: "0.9rem" }}>
+              ❤️ {r.likes_count}
+            </span>
+          )}
         </div>
       ))}
     </div>

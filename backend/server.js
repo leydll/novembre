@@ -1,6 +1,8 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
 const pool = require('./config/database'); 
 const authRoutes = require('./routes/auth');
 const recipesRoutes = require("./routes/recipes");
@@ -8,14 +10,28 @@ const recipesRoutes = require("./routes/recipes");
 const app = express();
 const PORT = process.env.PORT || 5001;
 
-// middlewares
+// Sécurité HTTP de base
+app.use(helmet());
+
+// Limitation de débit (rate limiting)
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // 100 requêtes par IP / fenêtre
+  standardHeaders: true,
+  legacyHeaders: false
+});
+app.use(limiter);
+
+// CORS (adapter origin en production)
 app.use(cors({
-  origin: "http://localhost:5173", // frontend
-  methods: ["GET", "POST", "PUT", "DELETE"],
+  origin: "http://localhost:5173",
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
   credentials: true 
 }));
 
-app.use(express.json());
+// Limiter la taille des payloads JSON / urlencoded
+app.use(express.json({ limit: "1mb" }));
+app.use(express.urlencoded({ extended: true, limit: "1mb" }));
 
 app.use((req, res, next) => {
     console.log(req.method, req.url, req.body);

@@ -8,6 +8,7 @@ import Login from "./pages/login";
 import Register from "./pages/register";
 import Profile from "./pages/profile";
 import AdminCreate from "./pages/admin";
+import Search from "./pages/search";
 import api from "./services/api";
 
 function App() {
@@ -37,7 +38,8 @@ function App() {
         <Route path="/recipes/:id" element={<RecipeDetail />} />
         <Route path="/login" element={<Login setUser={setUser} />} />
         <Route path="/register" element={<Register setUser={setUser} />} />
-        <Route path="/profile" element={<Profile user={user} />} />
+        <Route path="/profile" element={<Profile user={user} setUser={setUser} />} />
+        <Route path="/search" element={<Search />} />
         <Route path="/admin/create" element={user?.role === "admin" ? <AdminCreate /> : <Home />} />
       </Routes>
     </>
