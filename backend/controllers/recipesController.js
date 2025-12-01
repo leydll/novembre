@@ -1,64 +1,65 @@
 const pool = require("../config/database");
 
-// méthode pour récupérer toutes les recettes
+// Récupérer toutes les recettes
 exports.getAll = async (req, res) => {
   try {
     const [recipes] = await pool.query("SELECT * FROM recipes");
     res.json(recipes);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error(err);
+    res.status(500).json({ message: "erreur serveur" });
   }
 };
 
-// métgode pour récupérer une recette en fonction de son id
+// Récupérer une recette par ID
 exports.getOne = async (req, res) => {
-  const { id } = req.params;
   try {
-    const [recipe] = await pool.query("SELECT * FROM recipes WHERE id = ?", [id]);
-    if (!recipe.length) return res.status(404).json({ message: "Recette non trouvée" });
-    res.json(recipe[0]);
+    const [recipes] = await pool.query("SELECT * FROM recipes WHERE id = ?", [req.params.id]);
+    if (!recipes.length) return res.status(404).json({ message: "recette non trouvée" });
+    res.json(recipes[0]);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error(err);
+    res.status(500).json({ message: "erreur serveur" });
   }
 };
 
-// methode pour ajouter une recette (uniquement l'admin)
+// Créer une recette (admin)
 exports.create = async (req, res) => {
-  const { title, description, image } = req.body;
-  const userId = req.user.id; // récupéré via middleware auth/admin
+  const { title, description, image, ingredients, steps, user_id } = req.body;
   try {
     const [result] = await pool.query(
-      "INSERT INTO recipes (title, description, image, user_id) VALUES (?, ?, ?, ?)",
-      [title, description, image, userId]
+      "INSERT INTO recipes (title, description, image, ingredients, steps, user_id) VALUES (?, ?, ?, ?, ?, ?)",
+      [title, description, image, ingredients, steps, user_id]
     );
-    res.status(201).json({ message: "Recette créée", id: result.insertId });
+    res.status(201).json({ message: "recette créée", id: result.insertId });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error(err);
+    res.status(500).json({ message: "erreur serveur" });
   }
 };
 
-// PATCH /recipes/:id (admin)
+// Mettre à jour une recette (admin)
 exports.update = async (req, res) => {
-  const { id } = req.params;
-  const { title, description, image } = req.body;
+  const { title, description, image, ingredients, steps } = req.body;
   try {
-    await pool.query(
-      "UPDATE recipes SET title=?, description=?, image=? WHERE id=?",
-      [title, description, image, id]
+    const [result] = await pool.query(
+      "UPDATE recipes SET title=?, description=?, image=?, ingredients=?, steps=? WHERE id=?",
+      [title, description, image, ingredients, steps, req.params.id]
     );
-    res.json({ message: "Recette mise à jour" });
+    res.json({ message: "recette mise à jour" });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error(err);
+    res.status(500).json({ message: "erreur serveur" });
   }
 };
 
-// DELETE /recipes/:id (admin)
+// Supprimer une recette (admin)
 exports.delete = async (req, res) => {
-  const { id } = req.params;
   try {
-    await pool.query("DELETE FROM recipes WHERE id=?", [id]);
-    res.json({ message: "Recette supprimée" });
+    const [result] = await pool.query("DELETE FROM recipes WHERE id=?", [req.params.id]);
+    res.json({ message: "recette supprimée" });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error(err);
+    res.status(500).json({ message: "erreur serveur" });
   }
 };

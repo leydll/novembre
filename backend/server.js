@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const pool = require('./config/database'); 
 const authRoutes = require('./routes/auth');
+const recipesRoutes = require("./routes/recipes");
 
 const app = express();
 const PORT = process.env.PORT || 5001;
@@ -23,6 +24,7 @@ app.use((req, res, next) => {
 
 // routes
 app.use('/auth', authRoutes);
+app.use("/recipes", recipesRoutes);
 
 // test de connexion à la base
 pool.getConnection()

@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const recipesController = require("../controllers/recipesController");
-const authMiddleware = require("../middleware/auth"); // vérifie JWT
-const adminMiddleware = require("../middleware/admin"); // vérifie rôle admin
+const authMiddleware = require("../middlewares/authMiddleware"); // vérifie JWT
+const adminMiddleware = require("../middlewares/admin"); // vérifie rôle admin
 
 // Routes publiques
 router.get("/", recipesController.getAll);

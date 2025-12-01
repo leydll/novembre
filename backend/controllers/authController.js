@@ -35,8 +35,11 @@ exports.register = async (req, res) => {
             [username, email, hashedPassword, role]
         );
 
-        // Générer un token JWT
-        const token = jwt.sign({ id: result.insertId }, process.env.JWT_SECRET, { expiresIn: "1h" });
+        // Récupérer l'utilisateur créé avec son role
+        const [newUser] = await pool.query("SELECT id, username, email, role FROM users WHERE id = ?", [result.insertId]);
+        
+        // Générer un token JWT avec id et role
+        const token = jwt.sign({ id: newUser[0].id, role: newUser[0].role }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
         res.status(201).json({ message: "Utilisateur créé", token });
     } catch (err) {
@@ -66,9 +69,23 @@ exports.login = async (req, res) => {
             return res.status(400).json({ message: "Email ou mot de passe incorrect" });
         }
 
-        const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+        const token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
         res.status(200).json({ message: "Connexion réussie", token });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Erreur serveur" });
+    }
+};
+
+// Récupérer les infos de l'utilisateur connecté
+exports.me = async (req, res) => {
+    try {
+        const [users] = await pool.query("SELECT id, username, email, role FROM users WHERE id = ?", [req.user.id]);
+        if (!users.length) {
+            return res.status(404).json({ message: "Utilisateur non trouvé" });
+        }
+        res.json(users[0]);
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: "Erreur serveur" });
