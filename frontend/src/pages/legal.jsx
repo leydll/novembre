@@ -3,7 +3,7 @@ export default function Legal() {
     <main className="app-shell">
       <h1 className="page-title">Mentions légales & confidentialité</h1>
       <p className="page-subtitle">
-        Informations sur l'édition du site, la collecte et l'utilisation de vos données.
+        Informations sur l&apos;édition du site, la collecte et l&apos;utilisation de vos données.
       </p>
 
       <section style={{ marginBottom: "1.5rem" }}>

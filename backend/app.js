@@ -5,9 +5,8 @@ const helmet = require("helmet");
 let rateLimit;
 try {
   // Utilise express-rate-limit si installé, sinon fallback no-op (utile en test)
-  // eslint-disable-next-line global-require
   rateLimit = require("express-rate-limit");
-} catch (e) {
+} catch (_e) {
   rateLimit = () => (req, res, next) => next();
 }
 const pool = require("./config/database");

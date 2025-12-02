@@ -16,7 +16,9 @@ export default function Search() {
 
   useEffect(() => {
     if (!q.trim()) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setRecipes([]);
+      setLoading(false);
       return;
     }
 
@@ -29,9 +31,13 @@ export default function Search() {
   }, [q]);
 
   return (
-    <div>
-      <h1>Résultats de recherche</h1>
-      {q && <p>Recherche pour : <strong>{q}</strong></p>}
+    <main>
+      <h1 className="page-title">Résultats de recherche</h1>
+      {q && (
+        <p className="page-subtitle">
+          Recherche pour : <strong>{q}</strong>
+        </p>
+      )}
 
       {loading && <p>Chargement...</p>}
 
@@ -39,19 +45,28 @@ export default function Search() {
         <p>Aucune recette trouvée pour cette recherche.</p>
       )}
 
-      <div>
+      <div className="recipes-grid">
         {recipes.map((r) => (
-          <div key={r.id}>
-            <Link to={`/recipes/${r.id}`}>{r.title}</Link>
-            {typeof r.likes_count !== "undefined" && (
-              <span style={{ marginLeft: "10px", fontSize: "0.9rem" }}>
-                ❤️ {r.likes_count}
-              </span>
-            )}
-          </div>
+          <article key={r.id} className="recipe-card">
+            <Link to={`/recipes/${r.id}`}>
+              <img
+                src={r.image || "https://via.placeholder.com/400x250?text=Recette"}
+                alt={r.title}
+                className="recipe-card-image"
+              />
+            </Link>
+            <div className="recipe-card-body">
+              <h2 className="recipe-card-title">
+                <Link to={`/recipes/${r.id}`}>{r.title}</Link>
+              </h2>
+              <div className="recipe-card-meta">
+                <span className="badge">❤️ {r.likes_count ?? 0}</span>
+              </div>
+            </div>
+          </article>
         ))}
       </div>
-    </div>
+    </main>
   );
 }
 

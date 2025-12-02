@@ -26,9 +26,8 @@ export default function RecipeDetail() {
         .then(res => setIsLiked(res.data.liked))
         .catch(() => {
           // en cas d'erreur (non connecté, etc.), on ignore
+          setIsLiked(false);
         });
-    } else {
-      setIsLiked(false);
     }
   }, [id]);
 
@@ -59,21 +58,46 @@ export default function RecipeDetail() {
     }
   };
 
-  if (!recipe) return <p>Chargement...</p>;
+  if (!recipe) return <main>Chargement...</main>;
+
+  const imageUrl = recipe.image || "https://via.placeholder.com/800x500?text=Recette";
 
   return (
-    <div>
-      <h1>{recipe.title}</h1>
-      <button onClick={handleToggleLike}>
-        {isLiked ? "💔 Retirer le like" : "❤️ Liker"}
-      </button>
-      <span style={{ marginLeft: "10px" }}>
-        {likesCount} like{likesCount > 1 ? "s" : ""}
-      </span>
-      <h2>Ingrédients</h2>
-      <pre>{recipe.ingredients}</pre>
-      <h2>Étapes</h2>
-      <pre>{recipe.steps}</pre>
-    </div>
+    <main className="recipe-page">
+      <header className="recipe-header">
+        <h1 className="recipe-title">{recipe.title}</h1>
+        <div className="recipe-header-meta">
+          <button className="recipe-like-button" onClick={handleToggleLike}>
+            {isLiked ? "💔 Retirer le like" : "❤️ Liker"}
+          </button>
+          <span className="badge">
+            {likesCount} like{likesCount > 1 ? "s" : ""}
+          </span>
+        </div>
+      </header>
+
+      <section className="recipe-main">
+        <div className="recipe-main-left">
+          {imageUrl && (
+            <img
+              src={imageUrl}
+              alt={recipe.title}
+              className="recipe-main-image"
+            />
+          )}
+          <div className="recipe-section">
+            <h2>Ingrédients</h2>
+            <pre className="recipe-text">{recipe.ingredients}</pre>
+          </div>
+        </div>
+
+        <div className="recipe-main-right">
+          <div className="recipe-section">
+            <h2>Étapes</h2>
+            <pre className="recipe-text">{recipe.steps}</pre>
+          </div>
+        </div>
+      </section>
+    </main>
   );
 }

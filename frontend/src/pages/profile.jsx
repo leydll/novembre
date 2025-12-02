@@ -2,14 +2,14 @@ import { useState } from "react";
 import api from "../services/api";
 
 export default function Profile({ user, setUser }) {
-  if (!user) return <p>Connectez-vous pour voir votre profil.</p>;
-
-  const [username, setUsername] = useState(user.username);
-  const [email, setEmail] = useState(user.email);
+  const [username, setUsername] = useState(user?.username || "");
+  const [email, setEmail] = useState(user?.email || "");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  if (!user) return <p>Connectez-vous pour voir votre profil.</p>;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -46,7 +46,7 @@ export default function Profile({ user, setUser }) {
 
       <form onSubmit={handleSubmit} style={{ maxWidth: "400px", display: "flex", flexDirection: "column", gap: "10px" }}>
         <label>
-          Nom d'utilisateur
+          Nom d&apos;utilisateur
           <input
             type="text"
             value={username}

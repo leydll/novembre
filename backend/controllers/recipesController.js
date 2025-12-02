@@ -63,7 +63,7 @@ exports.create = async (req, res) => {
 exports.update = async (req, res) => {
   const { title, description, image, ingredients, steps } = req.body;
   try {
-    const [result] = await pool.query(
+    await pool.query(
       "UPDATE recipes SET title=?, description=?, image=?, ingredients=?, steps=? WHERE id=?",
       [title, description, image, ingredients, steps, req.params.id]
     );
@@ -77,7 +77,7 @@ exports.update = async (req, res) => {
 // Supprimer une recette (admin)
 exports.delete = async (req, res) => {
   try {
-    const [result] = await pool.query("DELETE FROM recipes WHERE id=?", [req.params.id]);
+    await pool.query("DELETE FROM recipes WHERE id=?", [req.params.id]);
     res.json({ message: "recette supprimée" });
   } catch (err) {
     console.error(err);

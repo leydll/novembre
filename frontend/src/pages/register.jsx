@@ -71,7 +71,7 @@ export default function Register({ setUser }) {
           required
         />
         <span>
-          J'accepte que mes données soient utilisées pour la gestion de mon compte, conformément aux
+          J&apos;accepte que mes données soient utilisées pour la gestion de mon compte, conformément aux
           mentions légales.
         </span>
       </label>
