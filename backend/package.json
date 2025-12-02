@@ -4,7 +4,13 @@
   "description": "backend du blog de patisserie",
   "main": "server.js",
   "scripts": {
-    "test": "NODE_ENV=test jest",
+    "test": "NODE_ENV=test jest --runInBand",
+    "test:coverage": "NODE_ENV=test jest --runInBand --coverage",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "prettier": "prettier --check .",
+    "prettier:fix": "prettier --write .",
+    "format": "npm run prettier:fix && npm run lint:fix",
     "start": "node server.js",
     "dev": "nodemon server.js"
   },
@@ -22,8 +28,11 @@
     "mysql2": "^3.15.3"
   },
   "devDependencies": {
+    "eslint": "^9.39.1",
+    "eslint-config-prettier": "^10.1.8",
     "jest": "^30.2.0",
     "nodemon": "^3.1.11",
+    "prettier": "^3.7.3",
     "supertest": "^7.1.4"
   }
 }
