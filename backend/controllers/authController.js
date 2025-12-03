@@ -28,7 +28,17 @@ exports.register = async (req, res) => {
         // Générer un token JWT avec id et role
         const token = jwt.sign({ id: newUser[0].id, role: newUser[0].role }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
-        res.status(201).json({ message: "Utilisateur créé", token });
+        // Déposer le token dans un cookie HttpOnly + Secure + SameSite
+        const isProd = process.env.NODE_ENV === "production";
+        res
+            .cookie("auth", token, {
+                httpOnly: true,
+                secure: isProd,
+                sameSite: isProd ? "Strict" : "Lax",
+                maxAge: 60 * 60 * 1000, // 1h
+            })
+            .status(201)
+            .json({ message: "Utilisateur créé", token });
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: "Erreur serveur" });
@@ -37,7 +47,7 @@ exports.register = async (req, res) => {
 
 // Connexion
 exports.login = async (req, res) => {
-    const { email, password } = req.body;
+        const { email, password } = req.body;
 
     // Validation simple
     if (!email || !password) {
@@ -58,7 +68,16 @@ exports.login = async (req, res) => {
 
         const token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
-        res.status(200).json({ message: "Connexion réussie", token });
+        const isProd = process.env.NODE_ENV === "production";
+        res
+            .cookie("auth", token, {
+                httpOnly: true,
+                secure: isProd,
+                sameSite: isProd ? "Strict" : "Lax",
+                maxAge: 60 * 60 * 1000,
+            })
+            .status(200)
+            .json({ message: "Connexion réussie", token });
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: "Erreur serveur" });

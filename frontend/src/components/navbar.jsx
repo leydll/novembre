@@ -1,9 +1,16 @@
 import { Link, useNavigate } from "react-router-dom";
+import api from "../services/api";
 
 export default function Navbar({ user, setUser }) {
   const navigate = useNavigate();
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+      // Demande au backend d'effacer le cookie HttpOnly
+      await api.post("/auth/logout");
+    } catch (e) {
+      // On ignore les erreurs ici, on nettoie côté client quoi qu'il arrive
+    }
     localStorage.removeItem("token");
     setUser(null);
     navigate("/login");
@@ -22,8 +29,9 @@ export default function Navbar({ user, setUser }) {
     <header className="app-shell">
       <nav className="navbar">
         <div className="navbar-left">
-          <Link to="/" className="navbar-logo">PinRecettes</Link>
+          <Link to="/" className="navbar-logo">bakesomecaakes</Link>
           <Link to="/recipes" className="navbar-link">Recettes</Link>
+          <Link to="/recommendations" className="navbar-link">Recommandations</Link>
           {user && <Link to="/profile" className="navbar-link">Profil</Link>}
           {user?.role === "admin" && (
             <Link to="/admin/create" className="navbar-link">Ajouter recette</Link>

@@ -19,4 +19,17 @@ router.post("/login", validateLogin, handleValidation, authController.login);
 router.get("/me", authMiddleware, authController.me);
 router.patch("/me", authMiddleware, validateUpdateProfile, handleValidation, authController.updateMe);
 
+// Déconnexion : on efface le cookie JWT (auth)
+router.post("/logout", (req, res) => {
+  const isProd = process.env.NODE_ENV === "production";
+  res
+    .clearCookie("auth", {
+      httpOnly: true,
+      secure: isProd,
+      sameSite: isProd ? "Strict" : "Lax",
+    })
+    .status(200)
+    .json({ message: "Déconnecté" });
+});
+
 module.exports = router;

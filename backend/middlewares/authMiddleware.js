@@ -1,7 +1,11 @@
 const jwt = require("jsonwebtoken");
 
 module.exports = (req, res, next) => {
-  const token = req.headers.authorization?.split(" ")[1];
+  // On accepte soit un JWT dans un cookie HttpOnly, soit dans le header Authorization (Bearer)
+  const cookieToken = req.cookies?.auth;
+  const headerToken = req.headers.authorization?.split(" ")[1];
+  const token = cookieToken || headerToken;
+
   if (!token) return res.status(401).json({ message: "Token manquant" });
 
   try {

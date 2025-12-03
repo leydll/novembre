@@ -14,11 +14,11 @@ exports.validateRegister = [
     .notEmpty().withMessage("Le mot de passe est requis")
     .isLength({ min: 12 }).withMessage("Le mot de passe doit faire au moins 12 caractères")
     .custom((value) => {
-      const hasUpper = /[A-Z]/.test(value);
-      const hasLower = /[a-z]/.test(value);
-      const hasDigit = /[0-9]/.test(value);
-      const hasSpecial = /[^A-Za-z0-9]/.test(value);
-      const types = [hasUpper, hasLower, hasDigit, hasSpecial].filter(Boolean).length;
+      const Maj = /[A-Z]/.test(value);
+      const Min = /[a-z]/.test(value);
+      const Numero = /[0-9]/.test(value);
+      const Special = /[^A-Za-z0-9]/.test(value);
+      const types = [Maj, Min, Numero, Special].filter(Boolean).length;
       if (types < 3) {
         throw new Error("Le mot de passe doit contenir au moins 3 types de caractères (majuscule, minuscule, chiffre, spécial)");
       }
@@ -51,11 +51,11 @@ exports.validateUpdateProfile = [
     .isLength({ min: 12 }).withMessage("Le mot de passe doit faire au moins 12 caractères")
     .custom((value) => {
       if (!value) return true;
-      const hasUpper = /[A-Z]/.test(value);
-      const hasLower = /[a-z]/.test(value);
-      const hasDigit = /[0-9]/.test(value);
-      const hasSpecial = /[^A-Za-z0-9]/.test(value);
-      const types = [hasUpper, hasLower, hasDigit, hasSpecial].filter(Boolean).length;
+      const Maj = /[A-Z]/.test(value);
+      const Min = /[a-z]/.test(value);
+      const Numero = /[0-9]/.test(value);
+      const Special = /[^A-Za-z0-9]/.test(value);
+      const types = [Maj, Min, Numero, Special].filter(Boolean).length;
       if (types < 3) {
         throw new Error("Le mot de passe doit contenir au moins 3 types de caractères (majuscule, minuscule, chiffre, spécial)");
       }

@@ -14,7 +14,7 @@ export default function Home({ user }) {
   return (
     <main>
       <h1 className="page-title">
-        {user ? `Bienvenue ${user.username} 👋` : "Bienvenue sur PinRecettes"}
+        {user ? `Bienvenue ${user.username} 👋` : "Bienvenue sur bakesomecaakes"}
       </h1>
       <p className="page-subtitle">
         {user
@@ -25,14 +25,21 @@ export default function Home({ user }) {
       <div className="recipes-grid">
         {recipes.map((r) => (
           <article key={r.id} className="recipe-card">
-            <h3 className="recipe-card-title">
-              <Link to={`/recipes/${r.id}`}>{r.title}</Link>
-            </h3>
-            <div className="recipe-card-meta">
-              <span className="chip-small">
-                ❤️ {r.likes_count ?? 0}
-              </span>
-              <span className="chip-small">Populaire</span>
+            <Link to={`/recipes/${r.id}`}>
+              <img
+                src={r.image || "https://via.placeholder.com/400x250?text=Recette"}
+                alt={r.title}
+                className="recipe-card-image"
+              />
+            </Link>
+            <div className="recipe-card-body">
+              <h3 className="recipe-card-title">
+                <Link to={`/recipes/${r.id}`}>{r.title}</Link>
+              </h3>
+              <div className="recipe-card-meta">
+                <span className="badge">❤️ {r.likes_count ?? 0}</span>
+                <span className="badge">Populaire</span>
+              </div>
             </div>
           </article>
         ))}

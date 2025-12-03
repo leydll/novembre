@@ -85,8 +85,6 @@ exports.delete = async (req, res) => {
   }
 };
 
-// --- Likes ---
-
 // Liker une recette
 exports.like = async (req, res) => {
   const userId = req.user.id;

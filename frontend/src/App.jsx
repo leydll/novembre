@@ -10,6 +10,7 @@ import Profile from "./pages/profile";
 import AdminCreate from "./pages/admin";
 import Search from "./pages/search";
 import Legal from "./pages/legal";
+import Recommendations from "./pages/recommendations";
 import api from "./services/api";
 
 function App() {
@@ -43,10 +44,11 @@ function App() {
         <Route path="/search" element={<Search />} />
         <Route path="/admin/create" element={user?.role === "admin" ? <AdminCreate /> : <Home />} />
         <Route path="/legal" element={<Legal />} />
+        <Route path="/recommendations" element={<Recommendations />} />
       </Routes>
       <footer className="app-shell" style={{ paddingTop: 0 }}>
         <div style={{ borderTop: "1px solid rgba(0,0,0,0.06)", paddingTop: "0.75rem", fontSize: "0.85rem", color: "var(--color-muted)", display: "flex", justifyContent: "space-between", gap: "1rem" }}>
-          <span>© {new Date().getFullYear()} PinRecettes</span>
+          <span>© {new Date().getFullYear()} bakesomecaakes</span>
           <a href="/legal">Mentions légales & confidentialité</a>
         </div>
       </footer>
