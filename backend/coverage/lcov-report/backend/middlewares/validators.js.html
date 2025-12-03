@@ -165,7 +165,15 @@
 <a name='L100'></a><a href='#L100'>100</a>
 <a name='L101'></a><a href='#L101'>101</a>
 <a name='L102'></a><a href='#L102'>102</a>
-<a name='L103'></a><a href='#L103'>103</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
+<a name='L103'></a><a href='#L103'>103</a>
+<a name='L104'></a><a href='#L104'>104</a>
+<a name='L105'></a><a href='#L105'>105</a>
+<a name='L106'></a><a href='#L106'>106</a>
+<a name='L107'></a><a href='#L107'>107</a>
+<a name='L108'></a><a href='#L108'>108</a>
+<a name='L109'></a><a href='#L109'>109</a>
+<a name='L110'></a><a href='#L110'>110</a>
+<a name='L111'></a><a href='#L111'>111</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
@@ -181,6 +189,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">6x</span>
@@ -188,13 +202,14 @@
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -204,8 +219,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -225,6 +240,8 @@
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -250,11 +267,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -273,15 +289,21 @@
 exports.validateRegister = [
   body("username")
     .trim()
-    .notEmpty().withMessage("Le nom d'utilisateur est requis")
-    .isLength({ min: 3, max: 50 }).withMessage("Le nom d'utilisateur doit contenir entre 3 et 50 caractères"),
+    .notEmpty()
+    .withMessage("Le nom d'utilisateur est requis")
+    .isLength({ min: 3, max: 50 })
+    .withMessage("Le nom d'utilisateur doit contenir entre 3 et 50 caractères"),
   body("email")
     .trim()
-    .notEmpty().withMessage("L'email est requis")
-    .isEmail().withMessage("Email invalide"),
+    .notEmpty()
+    .withMessage("L'email est requis")
+    .isEmail()
+    .withMessage("Email invalide"),
   body("password")
-    .notEmpty().withMessage("Le mot de passe est requis")
-    .isLength({ min: 12 }).withMessage("Le mot de passe doit faire au moins 12 caractères")
+    .notEmpty()
+    .withMessage("Le mot de passe est requis")
+    .isLength({ min: 12 })
+    .withMessage("Le mot de passe doit faire au moins 12 caractères")
     .custom((value) =&gt; {
       const Maj = /[A-Z]/.test(value);
       const Min = /[a-z]/.test(value);
@@ -289,35 +311,36 @@ exports.validateRegister = [
       const Special = /[^A-Za-z0-9]/.test(value);
       const types = [Maj, Min, Numero, Special].filter(Boolean).length;
       if (types &lt; 3) {
-        throw new Error("Le mot de passe doit contenir au moins 3 types de caractères (majuscule, minuscule, chiffre, spécial)");
+        throw new Error(
+          "Le mot de passe doit contenir au moins 3 types de caractères (majuscule, minuscule, chiffre, spécial)"
+        );
       }
       return true;
     }),
-  body("consent")
-    .equals("true").withMessage("Le consentement est requis")
+  body("consent").equals("true").withMessage("Le consentement est requis"),
 ];
 &nbsp;
 exports.validateLogin = [
   body("email")
     .trim()
-    .notEmpty().withMessage("L'email est requis")
-    .isEmail().withMessage("Email invalide"),
-  body("password")
-    .notEmpty().withMessage("Le mot de passe est requis")
+    .notEmpty()
+    .withMessage("L'email est requis")
+    .isEmail()
+    .withMessage("Email invalide"),
+  body("password").notEmpty().withMessage("Le mot de passe est requis"),
 ];
 &nbsp;
 exports.validateUpdateProfile = [
   body("username")
     .optional()
     .trim()
-    .isLength({ min: 3, max: 50 }).withMessage("Le nom d'utilisateur doit contenir entre 3 et 50 caractères"),
-  body("email")
-    .optional()
-    .trim()
-    .isEmail().withMessage("Email invalide"),
+    .isLength({ min: 3, max: 50 })
+    .withMessage("Le nom d'utilisateur doit contenir entre 3 et 50 caractères"),
+  body("email").optional().trim().isEmail().withMessage("Email invalide"),
   body("password")
     .optional()
-    .isLength({ min: 12 }).withMessage("Le mot de passe doit faire au moins 12 caractères")
+    .isLength({ min: 12 })
+    .withMessage("Le mot de passe doit faire au moins 12 caractères")
     .custom((value) =&gt; {
       <span class="missing-if-branch" title="if path not taken" >I</span>if (!value) <span class="cstat-no" title="statement not covered" >return true;</span>
       const Maj = /[A-Z]/.test(value);
@@ -326,49 +349,50 @@ exports.validateUpdateProfile = [
       const Special = /[^A-Za-z0-9]/.test(value);
       const types = [Maj, Min, Numero, Special].filter(Boolean).length;
       if (types &lt; 3) {
-        throw new Error("Le mot de passe doit contenir au moins 3 types de caractères (majuscule, minuscule, chiffre, spécial)");
+        throw new Error(
+          "Le mot de passe doit contenir au moins 3 types de caractères (majuscule, minuscule, chiffre, spécial)"
+        );
       }
       return true;
-    })
+    }),
 ];
 &nbsp;
 // Recipes
 exports.validateCreateRecipe = [
   body("title")
     .trim()
-    .notEmpty().withMessage("Le titre est requis")
-    .isLength({ min: 3, max: 255 }).withMessage("Le titre doit contenir entre 3 et 255 caractères"),
+    .notEmpty()
+    .withMessage("Le titre est requis")
+    .isLength({ min: 3, max: 255 })
+    .withMessage("Le titre doit contenir entre 3 et 255 caractères"),
   body("description")
     .optional()
-    .isLength({ max: 2000 }).withMessage("La description est trop longue"),
+    .isLength({ max: 2000 })
+    .withMessage("La description est trop longue"),
   body("image")
     .optional()
-    .isURL().withMessage("L'URL de l'image doit être valide"),
+    .isURL()
+    .withMessage("L'URL de l'image doit être valide"),
   body("ingredients")
     .trim()
-    .notEmpty().withMessage("Les ingrédients sont requis"),
-  body("steps")
-    .trim()
-    .notEmpty().withMessage("Les étapes sont requises")
+    .notEmpty()
+    .withMessage("Les ingrédients sont requis"),
+  body("steps").trim().notEmpty().withMessage("Les étapes sont requises"),
 ];
 &nbsp;
 exports.validateUpdateRecipe = [
   body("title")
     .optional()
     .trim()
-    .isLength({ min: 3, max: 255 }).withMessage("Le titre doit contenir entre 3 et 255 caractères"),
+    .isLength({ min: 3, max: 255 })
+    .withMessage("Le titre doit contenir entre 3 et 255 caractères"),
   body("description")
     .optional()
-    .isLength({ max: 2000 }).withMessage("La description est trop longue"),
-  body("ingredients")
-    .optional()
-    .trim(),
-  body("steps")
-    .optional()
-    .trim()
+    .isLength({ max: 2000 })
+    .withMessage("La description est trop longue"),
+  body("ingredients").optional().trim(),
+  body("steps").optional().trim(),
 ];
-&nbsp;
-&nbsp;
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -376,7 +400,7 @@ exports.validateUpdateRecipe = [
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-03T22:23:08.649Z
+                at 2025-12-03T22:28:40.765Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

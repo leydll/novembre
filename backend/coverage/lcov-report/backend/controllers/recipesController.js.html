@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">91.66% </span>
+                <span class="strong">91.8% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>55/60</span>
+                <span class='fraction'>56/61</span>
             </div>
         
             
@@ -192,7 +192,16 @@
 <a name='L127'></a><a href='#L127'>127</a>
 <a name='L128'></a><a href='#L128'>128</a>
 <a name='L129'></a><a href='#L129'>129</a>
-<a name='L130'></a><a href='#L130'>130</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
+<a name='L130'></a><a href='#L130'>130</a>
+<a name='L131'></a><a href='#L131'>131</a>
+<a name='L132'></a><a href='#L132'>132</a>
+<a name='L133'></a><a href='#L133'>133</a>
+<a name='L134'></a><a href='#L134'>134</a>
+<a name='L135'></a><a href='#L135'>135</a>
+<a name='L136'></a><a href='#L136'>136</a>
+<a name='L137'></a><a href='#L137'>137</a>
+<a name='L138'></a><a href='#L138'>138</a>
+<a name='L139'></a><a href='#L139'>139</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">4x</span>
@@ -234,6 +243,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -251,6 +261,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -287,6 +299,9 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -300,6 +315,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -363,7 +381,8 @@ exports.getOne = async (req, res) =&gt; {
        WHERE r.id = ?`,
       [req.params.id]
     );
-    <span class="missing-if-branch" title="else path not taken" >E</span>if (!recipes.length) return res.status(404).json({ message: "recette non trouvée" });
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (!recipes.length)
+      return res.status(404).json({ message: "recette non trouvée" });
 <span class="cstat-no" title="statement not covered" >    return res.json(recipes[0]);</span>
   } catch (err) {
 <span class="cstat-no" title="statement not covered" >    return handleServerError(res, err);</span>
@@ -378,7 +397,9 @@ exports.create = async (req, res) =&gt; {
       "INSERT INTO recipes (title, description, image, ingredients, steps, user_id) VALUES (?, ?, ?, ?, ?, ?)",
       [title, description, image, ingredients, steps, user_id]
     );
-    return res.status(201).json({ message: "recette créée", id: result.insertId });
+    return res
+      .status(201)
+      .json({ message: "recette créée", id: result.insertId });
   } catch (err) {
     return handleServerError(res, err);
   }
@@ -415,7 +436,10 @@ exports.like = async (req, res) =&gt; {
 &nbsp;
   try {
     // Empêcher les doublons (un like par user/recette)
-    await pool.query("INSERT IGNORE INTO recipe_likes (user_id, recipe_id) VALUES (?, ?)", [userId, recipeId]);
+    await pool.query(
+      "INSERT IGNORE INTO recipe_likes (user_id, recipe_id) VALUES (?, ?)",
+      [userId, recipeId]
+    );
     return res.status(201).json({ message: "like ajouté" });
   } catch (err) {
 <span class="cstat-no" title="statement not covered" >    return handleServerError(res, err);</span>
@@ -428,7 +452,10 @@ exports.unlike = async (req, res) =&gt; {
   const recipeId = req.params.id;
 &nbsp;
   try {
-    await pool.query("DELETE FROM recipe_likes WHERE user_id = ? AND recipe_id = ?", [userId, recipeId]);
+    await pool.query(
+      "DELETE FROM recipe_likes WHERE user_id = ? AND recipe_id = ?",
+      [userId, recipeId]
+    );
     return res.json({ message: "like retiré" });
   } catch (err) {
 <span class="cstat-no" title="statement not covered" >    return handleServerError(res, err);</span>
@@ -441,10 +468,10 @@ exports.isLiked = async (req, res) =&gt; {
   const recipeId = req.params.id;
 &nbsp;
   try {
-    const [rows] = await pool.query("SELECT 1 FROM recipe_likes WHERE user_id = ? AND recipe_id = ? LIMIT 1", [
-      userId,
-      recipeId,
-    ]);
+    const [rows] = await pool.query(
+      "SELECT 1 FROM recipe_likes WHERE user_id = ? AND recipe_id = ? LIMIT 1",
+      [userId, recipeId]
+    );
     return res.json({ liked: rows.length &gt; 0 });
   } catch (err) {
 <span class="cstat-no" title="statement not covered" >    return handleServerError(res, err);</span>
@@ -457,7 +484,7 @@ exports.isLiked = async (req, res) =&gt; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-03T22:23:08.649Z
+                at 2025-12-03T22:28:40.765Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

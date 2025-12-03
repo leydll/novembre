@@ -10,20 +10,22 @@ export default function RecipeDetail() {
 
   useEffect(() => {
     // Récupérer les infos de la recette (avec likes_count)
-    api.get(`/recipes/${id}`)
-      .then(res => {
+    api
+      .get(`/recipes/${id}`)
+      .then((res) => {
         setRecipe(res.data);
         setLikesCount(res.data.likes_count || 0);
       })
-      .catch(err => console.error(err));
+      .catch((err) => console.error(err));
 
     // Vérifier si l'utilisateur a liké (si connecté)
     const token = localStorage.getItem("token");
     if (token) {
-      api.get(`/recipes/${id}/like`, {
-        headers: { Authorization: `Bearer ${token}` }
-      })
-        .then(res => setIsLiked(res.data.liked))
+      api
+        .get(`/recipes/${id}/like`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((res) => setIsLiked(res.data.liked))
         .catch(() => {
           // en cas d'erreur (non connecté, etc.), on ignore
           setIsLiked(false);
@@ -41,14 +43,18 @@ export default function RecipeDetail() {
     try {
       if (isLiked) {
         await api.delete(`/recipes/${id}/like`, {
-          headers: { Authorization: `Bearer ${token}` }
+          headers: { Authorization: `Bearer ${token}` },
         });
         setIsLiked(false);
         setLikesCount((prev) => Math.max(0, prev - 1));
       } else {
-        await api.post(`/recipes/${id}/like`, {}, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        await api.post(
+          `/recipes/${id}/like`,
+          {},
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         setIsLiked(true);
         setLikesCount((prev) => prev + 1);
       }
@@ -60,7 +66,8 @@ export default function RecipeDetail() {
 
   if (!recipe) return <main>Chargement...</main>;
 
-  const imageUrl = recipe.image || "https://via.placeholder.com/800x500?text=Recette";
+  const imageUrl =
+    recipe.image || "https://via.placeholder.com/800x500?text=Recette";
 
   return (
     <main className="recipe-page">

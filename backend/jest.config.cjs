@@ -23,4 +23,9 @@ module.exports = {
       statements: 80,
     },
   },
+  // Réduire le bruit des console.error dans les tests
+  silent: false,
+  verbose: false,
+  // Setup file pour mock console.error
+  setupFilesAfterEnv: ["<rootDir>/tests/setup.js"],
 };

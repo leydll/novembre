@@ -1,620 +1,621 @@
 /* =========================
     VARIABLES GÉNÉRALES
    ========================= */
-   :root {
-    --color-bg: #faf7f5;
-    --color-white: #ffffff;
-  
-    /* Palette pastel */
-    --color-accent: #f7b8c6;     /* rose pastel */
-    --color-accent-light: #fde1e8;
-    --color-mint: #d8f3dc;
-    --color-yellow: #fff3b0;
-    --color-blue: #d7e3fc;
-  
-    --color-text: #4a3f35;
-    --color-muted: #8f857d;
-    --color-border: rgba(0, 0, 0, 0.09);
-  
-    --font-title: 'Playfair Display', serif;
-    --font-body: 'Cormorant Garamond', serif;
-  }
-  
-  /* Import Google Fonts */
-  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Cormorant+Garamond:wght@300;400;500&display=swap');
-  
-  
-  /* =========================
+:root {
+  --color-bg: #faf7f5;
+  --color-white: #ffffff;
+
+  /* Palette pastel */
+  --color-accent: #f7b8c6; /* rose pastel */
+  --color-accent-light: #fde1e8;
+  --color-mint: #d8f3dc;
+  --color-yellow: #fff3b0;
+  --color-blue: #d7e3fc;
+
+  --color-text: #4a3f35;
+  --color-muted: #8f857d;
+  --color-border: rgba(0, 0, 0, 0.09);
+
+  --font-title: "Playfair Display", serif;
+  --font-body: "Cormorant Garamond", serif;
+}
+
+/* Import Google Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Cormorant+Garamond:wght@300;400;500&display=swap");
+
+/* =========================
         LAYOUT GLOBAL
      ========================= */
-  
-  body {
-    margin: 0;
-    padding: 0;
-    background: var(--color-bg);
-    font-family: var(--font-body);
-    color: var(--color-text);
-    line-height: 1.55;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
 
-  #root {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-  }
-  
-  .app-shell {
-    max-width: 1120px;
-    margin: 0 auto;
-    padding: 0 1.5rem;
-  }
-  
-  main {
-    max-width: 1120px;
-    margin: 1.5rem auto;
-    padding: 0 1.5rem 5rem;
-    flex: 1;
-  }
-  
-  h1, h2, h3 {
-    font-family: 'Cormorant Garamond', serif;
-    font-weight: 300;
-    color: var(--color-text);
-  }
-  
-  .page-title {
-    font-size: 2.1rem;
-    font-weight: 300;
-    margin-bottom: 0.5rem;
-  }
-  
-  .page-subtitle {
-    font-size: 1.05rem;
-    color: var(--color-muted);
-    margin-bottom: 1.5rem;
-  }
-  
-  
-  /* =========================
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--color-bg);
+  font-family: var(--font-body);
+  color: var(--color-text);
+  line-height: 1.55;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-shell {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+main {
+  max-width: 1120px;
+  margin: 1.5rem auto;
+  padding: 0 1.5rem 5rem;
+  flex: 1;
+}
+
+h1,
+h2,
+h3 {
+  font-family: "Cormorant Garamond", serif;
+  font-weight: 300;
+  color: var(--color-text);
+}
+
+.page-title {
+  font-size: 2.1rem;
+  font-weight: 300;
+  margin-bottom: 0.5rem;
+}
+
+.page-subtitle {
+  font-size: 1.05rem;
+  color: var(--color-muted);
+  margin-bottom: 1.5rem;
+}
+
+/* =========================
           NAVBAR
      ========================= */
-  
-  .app-shell.navbar-container {
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-  }
 
-  .navbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1rem 1.5rem;
-    background: var(--color-accent);
-    border-radius: 20px;
-    box-shadow: 0px 4px 12px rgba(247, 184, 198, 0.3);
-    position: sticky;
-    top: 1rem;
-    z-index: 10;
-    margin-bottom: 0;
-    gap: 5rem;
-  }
-  
-  .navbar-left,
-  .navbar-right {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-  }
-  
-  .navbar-logo {
-    font-family: var(--font-title);
-    font-size: 1.3rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: #ffffff;
-    text-decoration: none;
-  }
-  
-  .navbar-link {
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 0.07em;
-    color: rgba(255, 255, 255, 0.9);
-    transition: 0.2s;
-    text-decoration: none;
-  }
-  
-  .navbar-link:hover {
-    color: #ffffff;
-  }
+.app-shell.navbar-container {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
 
-  .navbar-link-bordered {
-    padding: 0.5rem 1.2rem;
-    border: 2px solid rgba(255, 255, 255, 0.5);
-    border-radius: 50px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    transition: all 0.2s;
-  }
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  background: var(--color-accent);
+  border-radius: 20px;
+  box-shadow: 0px 4px 12px rgba(247, 184, 198, 0.3);
+  position: sticky;
+  top: 1rem;
+  z-index: 10;
+  margin-bottom: 0;
+  gap: 5rem;
+}
 
-  .navbar-link-bordered:hover {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.7);
-  }
+.navbar-left,
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
 
-  .navbar .btn-primary.navbar-link-bordered {
-    border: 2px solid #ffffff;
-    background: #ffffff;
-    color: var(--color-accent);
-  }
+.navbar-logo {
+  font-family: var(--font-title);
+  font-size: 1.3rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #ffffff;
+  text-decoration: none;
+}
 
-  .navbar .btn-primary.navbar-link-bordered:hover {
-    background: rgba(255, 255, 255, 0.95);
-    border-color: #ffffff;
-  }
-  
-  .navbar-username {
-    font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.9);
-  }
+.navbar-link {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: rgba(255, 255, 255, 0.9);
+  transition: 0.2s;
+  text-decoration: none;
+}
 
-  /* =========================
+.navbar-link:hover {
+  color: #ffffff;
+}
+
+.navbar-link-bordered {
+  padding: 0.5rem 1.2rem;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  border-radius: 50px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  transition: all 0.2s;
+}
+
+.navbar-link-bordered:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.7);
+}
+
+.navbar .btn-primary.navbar-link-bordered {
+  border: 2px solid #ffffff;
+  background: #ffffff;
+  color: var(--color-accent);
+}
+
+.navbar .btn-primary.navbar-link-bordered:hover {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: #ffffff;
+}
+
+.navbar-username {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* =========================
        BARRE DE RECHERCHE SÉPARÉE
      ========================= */
 
-  .search-bar-container {
-    padding: 0.5rem 0 1rem;
-    background: var(--color-bg);
-  }
+.search-bar-container {
+  padding: 0.5rem 0 1rem;
+  background: var(--color-bg);
+}
 
-  .search-bar {
-    width: 100%;
-    max-width: 600px;
-    margin: 0 auto;
-    display: block;
-    padding: 0.75rem 1.5rem;
-    border-radius: 50px;
-    border: 1px solid var(--color-border);
-    background: var(--color-white);
-    font-size: 1rem;
-    font-family: var(--font-body);
-    color: var(--color-text);
-    transition: all 0.2s;
-    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.04);
-  }
+.search-bar {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  display: block;
+  padding: 0.75rem 1.5rem;
+  border-radius: 50px;
+  border: 1px solid var(--color-border);
+  background: var(--color-white);
+  font-size: 1rem;
+  font-family: var(--font-body);
+  color: var(--color-text);
+  transition: all 0.2s;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.04);
+}
 
-  .search-bar:focus {
-    outline: none;
-    border-color: var(--color-accent);
-    box-shadow: 0px 4px 12px rgba(247, 184, 198, 0.2);
-  }
+.search-bar:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0px 4px 12px rgba(247, 184, 198, 0.2);
+}
 
-  .search-bar::placeholder {
-    color: var(--color-muted);
-  }
-  
-  .btn-primary,
-  .btn-ghost {
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    padding: 0.45rem 1.1rem;
-    border-radius: 999px;
-    border: 1px solid var(--color-border);
-    cursor: pointer;
-    transition: 0.2s;
-  }
-  
-  .btn-primary {
-    background: var(--color-accent);
-    border-color: var(--color-accent);
-    color: #ffffff;
-  }
-  
-  .btn-primary:hover {
-    filter: brightness(1.06);
-  }
-  
-  .btn-ghost {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.4);
-    color: #ffffff;
-    backdrop-filter: blur(10px);
-  }
-  
-  .btn-ghost:hover {
-    background: rgba(255, 255, 255, 0.3);
-    border-color: rgba(255, 255, 255, 0.5);
-  }
+.search-bar::placeholder {
+  color: var(--color-muted);
+}
 
-  .navbar .btn-primary {
-    background: #ffffff;
-    color: var(--color-accent);
-    border-color: #ffffff;
-  }
+.btn-primary,
+.btn-ghost {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 0.45rem 1.1rem;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  transition: 0.2s;
+}
 
-  .navbar .btn-primary:hover {
-    background: rgba(255, 255, 255, 0.95);
-    filter: brightness(0.98);
-  }
-  
-  
-  /* =========================
+.btn-primary {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #ffffff;
+}
+
+.btn-primary:hover {
+  filter: brightness(1.06);
+}
+
+.btn-ghost {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.4);
+  color: #ffffff;
+  backdrop-filter: blur(10px);
+}
+
+.btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.navbar .btn-primary {
+  background: #ffffff;
+  color: var(--color-accent);
+  border-color: #ffffff;
+}
+
+.navbar .btn-primary:hover {
+  background: rgba(255, 255, 255, 0.95);
+  filter: brightness(0.98);
+}
+
+/* =========================
        GRILLE PINTEREST
      ========================= */
-  
-  .recipes-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1.8rem;
-    min-height: 200px;
-  }
-  
-  .recipe-card {
-    background: var(--color-white);
-    border-radius: 14px;
-    border: 1px solid var(--color-border);
-    overflow: hidden;
-    box-shadow: 0px 3px 12px rgba(0,0,0,0.04);
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-  
-  .recipe-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0px 6px 18px rgba(0,0,0,0.07);
-  }
-  
-  .recipe-card-image {
-    width: 100%;
-    height: 185px;
-    object-fit: cover;
-    background: #ddd;
-  }
-  
-  .recipe-card-body {
-    padding: 0.9rem 0.95rem 1rem;
-  }
-  
-  .recipe-card-title {
-    font-size: 1.15rem;
-    margin: 0 0 0.4rem;
-    font-weight: 300;
-    font-family: 'Cormorant Garamond', serif;
-  }
-  
-  .recipe-card-title a {
-    color: var(--color-text);
-    text-decoration: none;
-  }
-  
-  .recipe-card-meta {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.8rem;
-    color: var(--color-muted);
-  }
-  
-  .badge {
-    background: var(--color-accent-light);
-    padding: 0.2rem 0.7rem;
-    border-radius: 999px;
-    font-size: 0.75rem;
-  }
-  
-  
-  /* =========================
+
+.recipes-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.8rem;
+  min-height: 200px;
+}
+
+.recipe-card {
+  background: var(--color-white);
+  border-radius: 14px;
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+  box-shadow: 0px 3px 12px rgba(0, 0, 0, 0.04);
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+
+.recipe-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.07);
+}
+
+.recipe-card-image {
+  width: 100%;
+  height: 185px;
+  object-fit: cover;
+  background: #ddd;
+}
+
+.recipe-card-body {
+  padding: 0.9rem 0.95rem 1rem;
+}
+
+.recipe-card-title {
+  font-size: 1.15rem;
+  margin: 0 0 0.4rem;
+  font-weight: 300;
+  font-family: "Cormorant Garamond", serif;
+}
+
+.recipe-card-title a {
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.recipe-card-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--color-muted);
+}
+
+.badge {
+  background: var(--color-accent-light);
+  padding: 0.2rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+}
+
+/* =========================
        PAGE RECETTE MARMITON
      ========================= */
-  
-  .recipe-page {
-    max-width: 1100px;
-  }
-  
-  .recipe-header {
-    margin-bottom: 1rem;
-    padding-bottom: 0.75rem;
-    border-bottom: 1px solid var(--color-border);
-  }
-  
-  .recipe-title {
-    font-size: 2.3rem;
-    margin-bottom: 0.4rem;
-  }
-  
-  .recipe-header-meta {
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-    font-size: 0.95rem;
-  }
-  
-  .recipe-like-button {
-    border: none;
-    background: var(--color-accent-light);
-    padding: 0.35rem 1rem;
-    border-radius: 999px;
-    cursor: pointer;
-    font-family: var(--font-title);
-    transition: 0.2s;
-  }
-  
-  .recipe-like-button:hover {
-    background: var(--color-accent);
-    color: #fff;
-  }
-  
-  /* Contenu structuré façon Marmiton */
-  .recipe-main {
-    display: grid;
-    grid-template-columns: 1.1fr 1.2fr;
-    gap: 1.5rem;
-    margin-top: 1.4rem;
-  }
-  
-  .recipe-main-left,
-  .recipe-main-right {
-    background: var(--color-white);
-    border-radius: 14px;
-    border: 1px solid var(--color-border);
-    padding: 1.2rem;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
-  }
-  
-  .recipe-main-image {
-    width: 100%;
-    border-radius: 10px;
-    margin-bottom: 1rem;
-  }
-  
-  .recipe-section h2 {
-    font-family: var(--font-title);
-    font-size: 1.3rem;
-    margin-bottom: 0.6rem;
-  }
-  
-  .recipe-text {
-    white-space: pre-wrap;
-    font-size: 1rem;
-    font-family: var(--font-body);
-    line-height: 1.55;
-  }
-  
-  /* =========================
+
+.recipe-page {
+  max-width: 1100px;
+}
+
+.recipe-header {
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.recipe-title {
+  font-size: 2.3rem;
+  margin-bottom: 0.4rem;
+}
+
+.recipe-header-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-size: 0.95rem;
+}
+
+.recipe-like-button {
+  border: none;
+  background: var(--color-accent-light);
+  padding: 0.35rem 1rem;
+  border-radius: 999px;
+  cursor: pointer;
+  font-family: var(--font-title);
+  transition: 0.2s;
+}
+
+.recipe-like-button:hover {
+  background: var(--color-accent);
+  color: #fff;
+}
+
+/* Contenu structuré façon Marmiton */
+.recipe-main {
+  display: grid;
+  grid-template-columns: 1.1fr 1.2fr;
+  gap: 1.5rem;
+  margin-top: 1.4rem;
+}
+
+.recipe-main-left,
+.recipe-main-right {
+  background: var(--color-white);
+  border-radius: 14px;
+  border: 1px solid var(--color-border);
+  padding: 1.2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+.recipe-main-image {
+  width: 100%;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+}
+
+.recipe-section h2 {
+  font-family: var(--font-title);
+  font-size: 1.3rem;
+  margin-bottom: 0.6rem;
+}
+
+.recipe-text {
+  white-space: pre-wrap;
+  font-size: 1rem;
+  font-family: var(--font-body);
+  line-height: 1.55;
+}
+
+/* =========================
        FORMULAIRES (LOGIN, REGISTER, ADMIN)
      ========================= */
 
-  form {
-    max-width: 450px;
-    margin: 2rem auto;
-    padding: 2.5rem;
-    background: var(--color-white);
-    border-radius: 20px;
-    border: 1px solid var(--color-border);
-    box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.06);
-    text-align: center;
-  }
+form {
+  max-width: 450px;
+  margin: 2rem auto;
+  padding: 2.5rem;
+  background: var(--color-white);
+  border-radius: 20px;
+  border: 1px solid var(--color-border);
+  box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.06);
+  text-align: center;
+}
 
-  form h1 {
-    font-family: var(--font-title);
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
-    color: var(--color-text);
-    text-align: center;
-  }
+form h1 {
+  font-family: var(--font-title);
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  color: var(--color-text);
+  text-align: center;
+}
 
-  form input[type="text"],
-  form input[type="email"],
-  form input[type="password"],
-  form input[type="url"],
-  form textarea {
-    width: 100%;
-    padding: 0.85rem 1.2rem;
-    margin-bottom: 1rem;
-    border: 1px solid var(--color-border);
-    border-radius: 50px;
-    background: #fdfdfd;
-    font-family: var(--font-body);
-    font-size: 1rem;
-    color: var(--color-text);
-    transition: border-color 0.2s, box-shadow 0.2s;
-    box-sizing: border-box;
-  }
+form input[type="text"],
+form input[type="email"],
+form input[type="password"],
+form input[type="url"],
+form textarea {
+  width: 100%;
+  padding: 0.85rem 1.2rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 50px;
+  background: #fdfdfd;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--color-text);
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+  box-sizing: border-box;
+}
 
-  form input:focus,
-  form textarea:focus {
-    outline: none;
-    border-color: var(--color-accent);
-    box-shadow: 0 0 0 3px rgba(247, 184, 198, 0.1);
-  }
+form input:focus,
+form textarea:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(247, 184, 198, 0.1);
+}
 
-  form textarea {
-    border-radius: 20px;
-    min-height: 120px;
-    resize: vertical;
-    padding: 1rem 1.2rem;
-  }
+form textarea {
+  border-radius: 20px;
+  min-height: 120px;
+  resize: vertical;
+  padding: 1rem 1.2rem;
+}
 
-  .image-url-input-wrapper {
-    position: relative;
-    width: 100%;
-    margin-bottom: 1rem;
-  }
+.image-url-input-wrapper {
+  position: relative;
+  width: 100%;
+  margin-bottom: 1rem;
+}
 
-  .image-url-input {
-    padding-right: 3rem;
-  }
+.image-url-input {
+  padding-right: 3rem;
+}
 
-  .clear-image-btn {
-    position: absolute;
-    right: 0.5rem;
-    top: 50%;
-    transform: translateY(-50%);
-    background: var(--color-accent);
-    color: #ffffff;
-    border: none;
-    border-radius: 50%;
-    width: 2rem;
-    height: 2rem;
-    font-size: 1.5rem;
-    line-height: 1;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-    box-shadow: 0px 2px 6px rgba(247, 184, 198, 0.3);
-  }
+.clear-image-btn {
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--color-accent);
+  color: #ffffff;
+  border: none;
+  border-radius: 50%;
+  width: 2rem;
+  height: 2rem;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  box-shadow: 0px 2px 6px rgba(247, 184, 198, 0.3);
+}
 
-  .clear-image-btn:hover {
-    background: #f5a5b5;
-    transform: translateY(-50%) scale(1.1);
-    box-shadow: 0px 4px 8px rgba(247, 184, 198, 0.4);
-  }
+.clear-image-btn:hover {
+  background: #f5a5b5;
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0px 4px 8px rgba(247, 184, 198, 0.4);
+}
 
-  form label {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.75rem;
-    margin: 1rem 0;
-    text-align: left;
-    font-size: 0.9rem;
-    color: var(--color-muted);
-    line-height: 1.5;
-  }
+form label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin: 1rem 0;
+  text-align: left;
+  font-size: 0.9rem;
+  color: var(--color-muted);
+  line-height: 1.5;
+}
 
-  form label input[type="checkbox"] {
-    margin-top: 0.2rem;
-    width: auto;
-    cursor: pointer;
-  }
+form label input[type="checkbox"] {
+  margin-top: 0.2rem;
+  width: auto;
+  cursor: pointer;
+}
 
-  form button[type="submit"] {
-    width: 100%;
-    padding: 0.9rem 2rem;
-    margin-top: 1rem;
-    background: var(--color-accent);
-    color: #ffffff;
-    border: none;
-    border-radius: 50px;
-    font-family: var(--font-body);
-    font-size: 1rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    cursor: pointer;
-    transition: all 0.2s;
-    box-shadow: 0px 2px 8px rgba(247, 184, 198, 0.3);
-  }
+form button[type="submit"] {
+  width: 100%;
+  padding: 0.9rem 2rem;
+  margin-top: 1rem;
+  background: var(--color-accent);
+  color: #ffffff;
+  border: none;
+  border-radius: 50px;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0px 2px 8px rgba(247, 184, 198, 0.3);
+}
 
-  form button[type="submit"]:hover {
-    background: #f5a5b5;
-    transform: translateY(-2px);
-    box-shadow: 0px 4px 12px rgba(247, 184, 198, 0.4);
-  }
+form button[type="submit"]:hover {
+  background: #f5a5b5;
+  transform: translateY(-2px);
+  box-shadow: 0px 4px 12px rgba(247, 184, 198, 0.4);
+}
 
-  form button[type="submit"]:active {
-    transform: translateY(0);
-  }
+form button[type="submit"]:active {
+  transform: translateY(0);
+}
 
-  /* Page admin - titre centré */
-  .admin-page {
-    text-align: center;
-    max-width: 100%;
-    width: 100%;
-    margin: 2rem auto;
-  }
+/* Page admin - titre centré */
+.admin-page {
+  text-align: center;
+  max-width: 100%;
+  width: 100%;
+  margin: 2rem auto;
+}
 
-  .admin-page h1 {
-    font-family: var(--font-title);
-    font-size: 2rem;
-    margin-bottom: 1.5rem;
-    color: var(--color-text);
-  }
+.admin-page h1 {
+  font-family: var(--font-title);
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: var(--color-text);
+}
 
-  /* =========================
+/* =========================
           FOOTER FIXE
      ========================= */
 
-  footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: var(--color-white);
-    border-top: 1px solid var(--color-border);
-    padding: 1rem 0;
-    z-index: 5;
-    box-shadow: 0px -2px 8px rgba(0, 0, 0, 0.04);
-  }
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--color-white);
+  border-top: 1px solid var(--color-border);
+  padding: 1rem 0;
+  z-index: 5;
+  box-shadow: 0px -2px 8px rgba(0, 0, 0, 0.04);
+}
 
+footer .app-shell {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.85rem;
+  color: var(--color-muted);
+}
+
+footer a {
+  color: var(--color-muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+footer a:hover {
+  color: var(--color-accent);
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .recipes-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 800px) {
+  .recipe-main {
+    grid-template-columns: 1fr;
+  }
+  .recipes-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.2rem;
+  }
+  main {
+    padding: 0 1rem 5rem;
+  }
+  form {
+    padding: 2rem 1.5rem;
+    margin: 1.5rem auto;
+  }
+  .navbar {
+    padding: 0.75rem 1rem;
+    border-radius: 15px;
+  }
+  .search-bar {
+    max-width: 100%;
+    padding: 0.65rem 1.2rem;
+    font-size: 0.95rem;
+  }
   footer .app-shell {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1rem;
-    font-size: 0.85rem;
-    color: var(--color-muted);
+    flex-direction: column;
+    text-align: center;
+    gap: 0.5rem;
   }
+  /* Profil admin - trois colonnes en une seule sur mobile */
+  .admin-page > div[style*="grid-template-columns"] {
+    grid-template-columns: 1fr !important;
+    gap: 1.5rem !important;
+  }
+}
 
-  footer a {
-    color: var(--color-muted);
-    text-decoration: none;
-    transition: color 0.2s;
+@media (max-width: 500px) {
+  .recipes-grid {
+    grid-template-columns: 1fr;
   }
-
-  footer a:hover {
-    color: var(--color-accent);
-  }
-
-  /* Responsive */
-  @media (max-width: 1200px) {
-    .recipes-grid {
-      grid-template-columns: repeat(3, 1fr);
-    }
-  }
-
-  @media (max-width: 800px) {
-    .recipe-main {
-      grid-template-columns: 1fr;
-    }
-    .recipes-grid {
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1.2rem;
-    }
-    main {
-      padding: 0 1rem 5rem;
-    }
-    form {
-      padding: 2rem 1.5rem;
-      margin: 1.5rem auto;
-    }
-    .navbar {
-      padding: 0.75rem 1rem;
-      border-radius: 15px;
-    }
-    .search-bar {
-      max-width: 100%;
-      padding: 0.65rem 1.2rem;
-      font-size: 0.95rem;
-    }
-    footer .app-shell {
-      flex-direction: column;
-      text-align: center;
-      gap: 0.5rem;
-    }
-    /* Profil admin - trois colonnes en une seule sur mobile */
-    .admin-page > div[style*="grid-template-columns"] {
-      grid-template-columns: 1fr !important;
-      gap: 1.5rem !important;
-    }
-  }
-
-  @media (max-width: 500px) {
-    .recipes-grid {
-      grid-template-columns: 1fr;
-    }
-  }
-  
+}

@@ -15,7 +15,7 @@ export default function Login({ setUser }) {
         localStorage.setItem("token", res.data.token);
         // Récupérer les infos utilisateur avec le token dans les headers
         const userRes = await api.get("/auth/me", {
-          headers: { Authorization: `Bearer ${res.data.token}` }
+          headers: { Authorization: `Bearer ${res.data.token}` },
         });
         setUser(userRes.data);
         alert("Connexion réussie !");

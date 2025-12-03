@@ -16,12 +16,17 @@ export default function Register({ setUser }) {
       return;
     }
     try {
-      const res = await api.post("/auth/register", { username, email, password, consent: true });
+      const res = await api.post("/auth/register", {
+        username,
+        email,
+        password,
+        consent: true,
+      });
       if (res.data.token) {
         localStorage.setItem("token", res.data.token);
         // Récupérer les infos utilisateur avec le token dans les headers
         const userRes = await api.get("/auth/me", {
-          headers: { Authorization: `Bearer ${res.data.token}` }
+          headers: { Authorization: `Bearer ${res.data.token}` },
         });
         setUser(userRes.data);
         alert("Inscription réussie !");
@@ -73,8 +78,8 @@ export default function Register({ setUser }) {
             required
           />
           <span>
-            J&apos;accepte que mes données soient utilisées pour la gestion de mon compte, conformément aux
-            mentions légales.
+            J&apos;accepte que mes données soient utilisées pour la gestion de
+            mon compte, conformément aux mentions légales.
           </span>
         </label>
         <button type="submit">S&apos;inscrire</button>

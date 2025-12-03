@@ -48,13 +48,25 @@ export default function Search() {
           </p>
 
           {loading && (
-            <p style={{ textAlign: "center", color: "var(--color-muted)", marginTop: "2rem" }}>
+            <p
+              style={{
+                textAlign: "center",
+                color: "var(--color-muted)",
+                marginTop: "2rem",
+              }}
+            >
               Chargement...
             </p>
           )}
 
           {!loading && recipes.length === 0 && (
-            <p style={{ textAlign: "center", color: "var(--color-muted)", marginTop: "2rem" }}>
+            <p
+              style={{
+                textAlign: "center",
+                color: "var(--color-muted)",
+                marginTop: "2rem",
+              }}
+            >
               Aucune recette trouvée pour &quot;{q}&quot;.
             </p>
           )}
@@ -72,12 +84,16 @@ export default function Search() {
           )}
         </>
       ) : (
-        <p style={{ textAlign: "center", color: "var(--color-muted)", marginTop: "2rem" }}>
+        <p
+          style={{
+            textAlign: "center",
+            color: "var(--color-muted)",
+            marginTop: "2rem",
+          }}
+        >
           Entrez un terme de recherche dans la barre de recherche ci-dessus.
         </p>
       )}
     </main>
   );
 }
-
-

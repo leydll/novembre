@@ -4,7 +4,8 @@ import api from "../services/api";
 export default function Navbar({ user, setUser }) {
   const navigate = useNavigate();
   const location = useLocation();
-  const hideSearch = location.pathname === "/login" || location.pathname === "/register";
+  const hideSearch =
+    location.pathname === "/login" || location.pathname === "/register";
 
   const handleLogout = async () => {
     try {
@@ -36,12 +37,24 @@ export default function Navbar({ user, setUser }) {
       <header className="app-shell navbar-container">
         <nav className="navbar">
           <div className="navbar-left">
-            <Link to="/" className="navbar-logo">bakesomecaakes</Link>
-            <Link to="/recipes" className="navbar-link">Recettes</Link>
-            <Link to="/recommendations" className="navbar-link">Recommandations</Link>
-            {user && <Link to="/profile" className="navbar-link">Profil</Link>}
+            <Link to="/" className="navbar-logo">
+              bakesomecaakes
+            </Link>
+            <Link to="/recipes" className="navbar-link">
+              Recettes
+            </Link>
+            <Link to="/recommendations" className="navbar-link">
+              Recommandations
+            </Link>
+            {user && (
+              <Link to="/profile" className="navbar-link">
+                Profil
+              </Link>
+            )}
             {user?.role === "admin" && (
-              <Link to="/admin/create" className="navbar-link">Ajouter recette</Link>
+              <Link to="/admin/create" className="navbar-link">
+                Ajouter recette
+              </Link>
             )}
           </div>
 
@@ -49,12 +62,21 @@ export default function Navbar({ user, setUser }) {
             {user ? (
               <>
                 <span className="navbar-username">{user.username}</span>
-                <button className="btn-ghost" onClick={handleLogout}>Déconnexion</button>
+                <button className="btn-ghost" onClick={handleLogout}>
+                  Déconnexion
+                </button>
               </>
             ) : (
               <>
-                <Link to="/login" className="navbar-link navbar-link-bordered">Connexion</Link>
-                <Link to="/register" className="btn-primary navbar-link-bordered">Inscription</Link>
+                <Link to="/login" className="navbar-link navbar-link-bordered">
+                  Connexion
+                </Link>
+                <Link
+                  to="/register"
+                  className="btn-primary navbar-link-bordered"
+                >
+                  Inscription
+                </Link>
               </>
             )}
           </div>

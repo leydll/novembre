@@ -12,8 +12,7 @@ import Search from "./pages/search";
 import Legal from "./pages/legal";
 import Recommendations from "./pages/recommendations";
 import api from "./services/api";
-import './App.css';
-
+import "./App.css";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -22,10 +21,11 @@ function App() {
     // Vérifier le token localStorage et récupérer infos utilisateur
     const token = localStorage.getItem("token");
     if (token) {
-      api.get("/auth/me", {
-        headers: { Authorization: `Bearer ${token}` }
-      })
-        .then(res => setUser(res.data))
+      api
+        .get("/auth/me", {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((res) => setUser(res.data))
         .catch(() => {
           setUser(null);
           localStorage.removeItem("token");
@@ -42,9 +42,15 @@ function App() {
         <Route path="/recipes/:id" element={<RecipeDetail />} />
         <Route path="/login" element={<Login setUser={setUser} />} />
         <Route path="/register" element={<Register setUser={setUser} />} />
-        <Route path="/profile" element={<Profile user={user} setUser={setUser} />} />
+        <Route
+          path="/profile"
+          element={<Profile user={user} setUser={setUser} />}
+        />
         <Route path="/search" element={<Search />} />
-        <Route path="/admin/create" element={user?.role === "admin" ? <AdminCreate /> : <Home />} />
+        <Route
+          path="/admin/create"
+          element={user?.role === "admin" ? <AdminCreate /> : <Home />}
+        />
         <Route path="/legal" element={<Legal />} />
         <Route path="/recommendations" element={<Recommendations />} />
       </Routes>

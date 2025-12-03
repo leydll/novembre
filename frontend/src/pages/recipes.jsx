@@ -8,12 +8,13 @@ export default function Recipes({ user }) {
 
   useEffect(() => {
     if (user) {
-      api.get("/recipes")
-        .then(res => {
+      api
+        .get("/recipes")
+        .then((res) => {
           console.log("Recettes reçues:", res.data);
           setRecipes(res.data || []);
         })
-        .catch(err => {
+        .catch((err) => {
           console.error("Erreur lors du chargement des recettes:", err);
           setRecipes([]);
         });
@@ -26,8 +27,12 @@ export default function Recipes({ user }) {
       <main>
         <div className="admin-page">
           <h1 className="page-title">Toutes les recettes</h1>
-          <p className="page-subtitle" style={{ textAlign: "center", marginBottom: "2rem" }}>
-            Inscrivez-vous ou connectez-vous pour accéder à toutes les recettes et fonctionnalités.
+          <p
+            className="page-subtitle"
+            style={{ textAlign: "center", marginBottom: "2rem" }}
+          >
+            Inscrivez-vous ou connectez-vous pour accéder à toutes les recettes
+            et fonctionnalités.
           </p>
           <div style={{ textAlign: "center", marginTop: "3rem" }}>
             <Link
@@ -45,7 +50,7 @@ export default function Recipes({ user }) {
                 textTransform: "uppercase",
                 letterSpacing: "0.05em",
                 boxShadow: "0px 2px 8px rgba(247, 184, 198, 0.3)",
-                transition: "all 0.2s"
+                transition: "all 0.2s",
               }}
             >
               S&apos;inscrire
@@ -63,7 +68,7 @@ export default function Recipes({ user }) {
                 fontWeight: 500,
                 textTransform: "uppercase",
                 letterSpacing: "0.05em",
-                transition: "all 0.2s"
+                transition: "all 0.2s",
               }}
             >
               Se connecter
@@ -77,9 +82,17 @@ export default function Recipes({ user }) {
   return (
     <main>
       <h1 className="page-title">Toutes les recettes</h1>
-      <p className="page-subtitle">Découvrez toutes les douceurs de bakesomecaakes.</p>
+      <p className="page-subtitle">
+        Découvrez toutes les douceurs de bakesomecaakes.
+      </p>
       {recipes.length === 0 ? (
-        <p style={{ textAlign: "center", color: "var(--color-muted)", marginTop: "2rem" }}>
+        <p
+          style={{
+            textAlign: "center",
+            color: "var(--color-muted)",
+            marginTop: "2rem",
+          }}
+        >
           Chargement des recettes...
         </p>
       ) : (
@@ -89,9 +102,7 @@ export default function Recipes({ user }) {
               console.warn("Recette invalide:", r);
               return null;
             }
-            return (
-              <RecipeCard key={r.id} recipe={r} />
-            );
+            return <RecipeCard key={r.id} recipe={r} />;
           })}
         </div>
       )}
