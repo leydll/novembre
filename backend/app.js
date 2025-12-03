@@ -71,6 +71,16 @@ if (process.env.NODE_ENV !== "test") {
 app.use("/auth", authRoutes);
 app.use("/recipes", recipesRoutes);
 
+// Route de test pour vérifier que le serveur fonctionne
+app.get("/", (req, res) => {
+  res.json({ message: "API bakesomecaakes", version: "1.0.0" });
+});
+
+// Gestion des routes non trouvées (404)
+app.use((req, res) => {
+  res.status(404).json({ message: "Route non trouvée", path: req.path });
+});
+
 // test de connexion à la base (uniquement hors test)
 if (process.env.NODE_ENV !== "test") {
   pool

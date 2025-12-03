@@ -39,43 +39,46 @@ export default function Register({ setUser }) {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="text"
-        placeholder="Nom d'utilisateur"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        required
-      />
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        required
-      />
-      <input
-        type="password"
-        placeholder="Mot de passe"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        minLength={12}
-        title="Au moins 12 caractères, avec majuscule, minuscule, chiffre et caractère spécial"
-        required
-      />
-      <label style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginTop: "0.5rem" }}>
+    <main>
+      <form onSubmit={handleSubmit}>
+        <h1>Inscription</h1>
         <input
-          type="checkbox"
-          checked={consent}
-          onChange={(e) => setConsent(e.target.checked)}
+          type="text"
+          placeholder="Nom d'utilisateur"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
           required
         />
-        <span>
-          J&apos;accepte que mes données soient utilisées pour la gestion de mon compte, conformément aux
-          mentions légales.
-        </span>
-      </label>
-      <button type="submit">Register</button>
-    </form>
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <input
+          type="password"
+          placeholder="Mot de passe"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          minLength={12}
+          title="Au moins 12 caractères, avec majuscule, minuscule, chiffre et caractère spécial"
+          required
+        />
+        <label>
+          <input
+            type="checkbox"
+            checked={consent}
+            onChange={(e) => setConsent(e.target.checked)}
+            required
+          />
+          <span>
+            J&apos;accepte que mes données soient utilisées pour la gestion de mon compte, conformément aux
+            mentions légales.
+          </span>
+        </label>
+        <button type="submit">S&apos;inscrire</button>
+      </form>
+    </main>
   );
 }

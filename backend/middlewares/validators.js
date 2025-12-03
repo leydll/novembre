@@ -72,6 +72,9 @@ exports.validateCreateRecipe = [
   body("description")
     .optional()
     .isLength({ max: 2000 }).withMessage("La description est trop longue"),
+  body("image")
+    .optional()
+    .isURL().withMessage("L'URL de l'image doit être valide"),
   body("ingredients")
     .trim()
     .notEmpty().withMessage("Les ingrédients sont requis"),

@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const authController = require("../controllers/authController");
 const authMiddleware = require("../middlewares/authMiddleware");
+const adminMiddleware = require("../middlewares/admin");
 const { validateRegister, validateLogin, validateUpdateProfile } = require("../middlewares/validators");
 const { validationResult } = require("express-validator");
 
@@ -18,6 +19,14 @@ router.post("/register", validateRegister, handleValidation, authController.regi
 router.post("/login", validateLogin, handleValidation, authController.login);
 router.get("/me", authMiddleware, authController.me);
 router.patch("/me", authMiddleware, validateUpdateProfile, handleValidation, authController.updateMe);
+
+// Routes admin pour la gestion des utilisateurs
+router.get("/users", authMiddleware, adminMiddleware, authController.getAllUsers);
+router.delete("/users/:id", authMiddleware, adminMiddleware, authController.deleteUser);
+
+// Routes pour la description du site
+router.get("/site/description", authController.getSiteDescription);
+router.patch("/site/description", authMiddleware, adminMiddleware, authController.updateSiteDescription);
 
 // Déconnexion : on efface le cookie JWT (auth)
 router.post("/logout", (req, res) => {

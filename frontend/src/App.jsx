@@ -12,6 +12,8 @@ import Search from "./pages/search";
 import Legal from "./pages/legal";
 import Recommendations from "./pages/recommendations";
 import api from "./services/api";
+import './App.css';
+
 
 function App() {
   const [user, setUser] = useState(null);
@@ -36,7 +38,7 @@ function App() {
       <Navbar user={user} setUser={setUser} />
       <Routes>
         <Route path="/" element={<Home user={user} />} />
-        <Route path="/recipes" element={<Recipes />} />
+        <Route path="/recipes" element={<Recipes user={user} />} />
         <Route path="/recipes/:id" element={<RecipeDetail />} />
         <Route path="/login" element={<Login setUser={setUser} />} />
         <Route path="/register" element={<Register setUser={setUser} />} />
@@ -46,8 +48,8 @@ function App() {
         <Route path="/legal" element={<Legal />} />
         <Route path="/recommendations" element={<Recommendations />} />
       </Routes>
-      <footer className="app-shell" style={{ paddingTop: 0 }}>
-        <div style={{ borderTop: "1px solid rgba(0,0,0,0.06)", paddingTop: "0.75rem", fontSize: "0.85rem", color: "var(--color-muted)", display: "flex", justifyContent: "space-between", gap: "1rem" }}>
+      <footer>
+        <div className="app-shell">
           <span>© {new Date().getFullYear()} bakesomecaakes</span>
           <a href="/legal">Mentions légales & confidentialité</a>
         </div>
