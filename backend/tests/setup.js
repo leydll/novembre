@@ -11,4 +11,3 @@ beforeAll(() => {
 afterAll(() => {
   console.error = originalConsoleError;
 });
-
