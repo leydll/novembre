@@ -44,12 +44,18 @@ app.use(cookieParser());
 app.use(express.json({ limit: "1mb" }));
 app.use(express.urlencoded({ extended: true, limit: "1mb" }));
 
-// Redirection HTTP -> HTTPS en production (si derrière un proxy)
+// Redirection HTTP -> HTTPS en production (si derrière un proxy).
+// Pour éviter toute redirection basée sur des données contrôlées par l'utilisateur,
+// on redirige uniquement vers une URL de confiance définie dans APP_BASE_URL (ex: https://bakesomecaakes.example.com).
 if (process.env.NODE_ENV === "production") {
+  const trustedUrl = process.env.APP_BASE_URL; // URL complète (schéma + host)
   app.enable("trust proxy");
   app.use((req, res, next) => {
-    if (req.secure) return next();
-    return res.redirect(`https://${req.headers.host}${req.url}`);
+    if (req.secure || !trustedUrl) {
+      return next();
+    }
+    // Redirection fixe vers l'URL de confiance, sans réutiliser host ou path de la requête
+    return res.redirect(301, trustedUrl);
   });
 }
 

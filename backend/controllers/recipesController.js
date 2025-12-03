@@ -1,5 +1,10 @@
 const pool = require("../config/database");
 
+const handleServerError = (res, err) => {
+  console.error(err);
+  return res.status(500).json({ message: "erreur serveur" });
+};
+
 // Récupérer toutes les recettes (avec compteur de likes) + recherche optionnelle
 exports.getAll = async (req, res) => {
   try {
@@ -13,16 +18,15 @@ exports.getAll = async (req, res) => {
     const params = [];
 
     if (q && q.trim() !== "") {
-      sql += " WHERE r.title LIKE ? OR r.description LIKE ?";
       const like = `%${q}%`;
+      sql += " WHERE r.title LIKE ? OR r.description LIKE ?";
       params.push(like, like);
     }
 
     const [recipes] = await pool.query(sql, params);
-    res.json(recipes);
+    return res.json(recipes);
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "erreur serveur" });
+    return handleServerError(res, err);
   }
 };
 
@@ -37,10 +41,9 @@ exports.getOne = async (req, res) => {
       [req.params.id]
     );
     if (!recipes.length) return res.status(404).json({ message: "recette non trouvée" });
-    res.json(recipes[0]);
+    return res.json(recipes[0]);
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "erreur serveur" });
+    return handleServerError(res, err);
   }
 };
 
@@ -52,10 +55,9 @@ exports.create = async (req, res) => {
       "INSERT INTO recipes (title, description, image, ingredients, steps, user_id) VALUES (?, ?, ?, ?, ?, ?)",
       [title, description, image, ingredients, steps, user_id]
     );
-    res.status(201).json({ message: "recette créée", id: result.insertId });
+    return res.status(201).json({ message: "recette créée", id: result.insertId });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "erreur serveur" });
+    return handleServerError(res, err);
   }
 };
 
@@ -67,10 +69,9 @@ exports.update = async (req, res) => {
       "UPDATE recipes SET title=?, description=?, image=?, ingredients=?, steps=? WHERE id=?",
       [title, description, image, ingredients, steps, req.params.id]
     );
-    res.json({ message: "recette mise à jour" });
+    return res.json({ message: "recette mise à jour" });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "erreur serveur" });
+    return handleServerError(res, err);
   }
 };
 
@@ -78,10 +79,9 @@ exports.update = async (req, res) => {
 exports.delete = async (req, res) => {
   try {
     await pool.query("DELETE FROM recipes WHERE id=?", [req.params.id]);
-    res.json({ message: "recette supprimée" });
+    return res.json({ message: "recette supprimée" });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "erreur serveur" });
+    return handleServerError(res, err);
   }
 };
 
@@ -92,14 +92,10 @@ exports.like = async (req, res) => {
 
   try {
     // Empêcher les doublons (un like par user/recette)
-    await pool.query(
-      "INSERT IGNORE INTO recipe_likes (user_id, recipe_id) VALUES (?, ?)",
-      [userId, recipeId]
-    );
-    res.status(201).json({ message: "like ajouté" });
+    await pool.query("INSERT IGNORE INTO recipe_likes (user_id, recipe_id) VALUES (?, ?)", [userId, recipeId]);
+    return res.status(201).json({ message: "like ajouté" });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "erreur serveur" });
+    return handleServerError(res, err);
   }
 };
 
@@ -109,14 +105,10 @@ exports.unlike = async (req, res) => {
   const recipeId = req.params.id;
 
   try {
-    await pool.query(
-      "DELETE FROM recipe_likes WHERE user_id = ? AND recipe_id = ?",
-      [userId, recipeId]
-    );
-    res.json({ message: "like retiré" });
+    await pool.query("DELETE FROM recipe_likes WHERE user_id = ? AND recipe_id = ?", [userId, recipeId]);
+    return res.json({ message: "like retiré" });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "erreur serveur" });
+    return handleServerError(res, err);
   }
 };
 
@@ -126,13 +118,12 @@ exports.isLiked = async (req, res) => {
   const recipeId = req.params.id;
 
   try {
-    const [rows] = await pool.query(
-      "SELECT 1 FROM recipe_likes WHERE user_id = ? AND recipe_id = ? LIMIT 1",
-      [userId, recipeId]
-    );
-    res.json({ liked: rows.length > 0 });
+    const [rows] = await pool.query("SELECT 1 FROM recipe_likes WHERE user_id = ? AND recipe_id = ? LIMIT 1", [
+      userId,
+      recipeId,
+    ]);
+    return res.json({ liked: rows.length > 0 });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "erreur serveur" });
+    return handleServerError(res, err);
   }
 };

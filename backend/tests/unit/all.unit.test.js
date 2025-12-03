@@ -10,12 +10,28 @@ const {
 } = require("../../middlewares/validators");
 const { validationResult } = require("express-validator");
 
-// Helper pour exécuter un tableau de middlewares de validation
+// Helpers communs pour les tests de middlewares
 const runValidations = async (validations, req) => {
   for (const v of validations) {
     await v(req, {}, () => {});
   }
   return validationResult(req);
+};
+
+const createResWithStatusAndBody = () => {
+  const res = {
+    statusCode: 0,
+    body: null,
+  };
+  res.status = (code) => {
+    res.statusCode = code;
+    return res;
+  };
+  res.json = (payload) => {
+    res.body = payload;
+    return res;
+  };
+  return res;
 };
 
 describe("Tests unitaires", () => {
@@ -24,17 +40,7 @@ describe("Tests unitaires", () => {
 
     test("renvoie 401 si aucun token", () => {
       const req = { headers: {} };
-      const res = {
-        statusCode: 0,
-        body: null,
-        status(code) {
-          this.statusCode = code;
-          return this;
-        },
-        json(payload) {
-          this.body = payload;
-        },
-      };
+      const res = createResWithStatusAndBody();
       const next = jest.fn();
 
       authMiddleware(req, res, next);
@@ -74,17 +80,7 @@ describe("Tests unitaires", () => {
   describe("adminMiddleware", () => {
     test("renvoie 403 si l'utilisateur n'est pas admin", () => {
       const req = { user: { role: "user" } };
-      const res = {
-        statusCode: 0,
-        body: null,
-        status(code) {
-          this.statusCode = code;
-          return this;
-        },
-        json(payload) {
-          this.body = payload;
-        },
-      };
+      const res = createResWithStatusAndBody();
       const next = jest.fn();
 
       adminMiddleware(req, res, next);
@@ -322,17 +318,7 @@ describe("Tests unitaires", () => {
         },
       };
 
-      const res = {
-        statusCode: 0,
-        body: null,
-        status(code) {
-          this.statusCode = code;
-          return this;
-        },
-        json(payload) {
-          this.body = payload;
-        },
-      };
+      const res = createResWithStatusAndBody();
       const next = jest.fn();
 
       authMiddleware(req, res, next);
@@ -349,17 +335,7 @@ describe("Tests unitaires", () => {
         },
       };
 
-      const res = {
-        statusCode: 0,
-        body: null,
-        status(code) {
-          this.statusCode = code;
-          return this;
-        },
-        json(payload) {
-          this.body = payload;
-        },
-      };
+      const res = createResWithStatusAndBody();
       const next = jest.fn();
 
       authMiddleware(req, res, next);

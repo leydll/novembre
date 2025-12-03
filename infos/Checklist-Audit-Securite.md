@@ -7,13 +7,13 @@
 
 ### 1.1 Gestion des secrets
 
-- [ ] **Aucun secret en clair dans le code** : Les mots de passe, clés API, tokens n'apparaissent pas dans les fichiers source (*.js, *.php, *.py, etc.)
+- [x] **Aucun secret en clair dans le code** : Les mots de passe, clés API, tokens n'apparaissent pas dans les fichiers source (*.js, *.php, *.py, etc.)
   - Vérification : `git log` et `git diff` ne doivent pas contenir de secrets
   - Les secrets doivent être dans un fichier `.env` (ajouté au `.gitignore`)
 
-- [ ] **Fichier `.gitignore` configuré** : Les fichiers `.env`, `config/`, `secrets/` ne sont pas dans le dépôt Git
+- [x] **Fichier `.gitignore` configuré** : Les fichiers `.env`, `config/`, `secrets/` ne sont pas dans le dépôt Git
 
-- [ ] **Variables d'environnement utilisées** : Accès aux secrets via `process.env` (Node), `$_ENV` (PHP), ou équivalent
+- [x] **Variables d'environnement utilisées** : Accès aux secrets via `process.env` (Node), `$_ENV` (PHP), ou équivalent
 
 **Preuves attendues :**
 - Capture d'écran du `.gitignore`
@@ -50,12 +50,12 @@
 
 ### 1.4 Dépendances saines
 
-- [ ] **Audit des paquets exécuté sans vulnérabilités critiques**
+- [x] **Audit des paquets exécuté sans vulnérabilités critiques**
   - Node.js : `npm audit` (résultat : 0 vulnérabilités "High" ou "Critical")
   - PHP : `composer audit` (résultat : 0 vulnérabilités critiques)
   - Python : `pip check` ou `safety check`
 
-- [ ] **Les dépendances sont à jour** : Pas de version obsolète connue pour être vulnérable
+- [x] **Les dépendances sont à jour** : Pas de version obsolète connue pour être vulnérable
 
 **Preuves attendues :**
 - Capture d'écran du résultat `npm audit` / `composer audit`
@@ -69,15 +69,15 @@
 
 ### 2.1 Mots de passe robustes
 
-- [ ] **Validation au signup** : La création de compte impose un minimum de 12 caractères
+- [x] **Validation au signup** : La création de compte impose un minimum de 12 caractères
 
-- [ ] **Complexité requise** (au moins 3 critères) :
-  - [ ] Majuscules
-  - [ ] Minuscules
-  - [ ] Chiffres
-  - [ ] Caractères spéciaux
+- [x] **Complexité requise** (au moins 3 critères) :
+  - [x] Majuscules
+  - [x] Minuscules
+  - [x] Chiffres
+  - [x] Caractères spéciaux
 
-- [ ] **Message d'erreur clair** : L'utilisateur sait pourquoi son mot de passe est rejeté
+- [x] **Message d'erreur clair** : L'utilisateur sait pourquoi son mot de passe est rejeté
 
 **Preuves attendues :**
 - Capture d'écran du formulaire d'inscription avec message de validation
@@ -87,12 +87,12 @@
 
 ### 2.2 Stockage des mots de passe
 
-- [ ] **Algorithme moderne obligatoire** : `bcrypt`, `Argon2`, ou `PBKDF2`
+- [x] **Algorithme moderne obligatoire** : `bcrypt`, `Argon2`, ou `PBKDF2`
   - **Interdiction absolue** : MD5, SHA1, SHA256 simple (sans salt), ou texte clair
   
-- [ ] **Salt généré automatiquement** : Chaque mot de passe a son propre salt unique
+- [x] **Salt généré automatiquement** : Chaque mot de passe a son propre salt unique
 
-- [ ] **Coût computationnel approprié** : Bcrypt avec au moins 10 rounds (par défaut)
+- [x] **Coût computationnel approprié** : Bcrypt avec au moins 10 rounds (par défaut)
 
 **Preuves attendues :**
 - Code source montrant `bcrypt.hash()`, `password_hash()`, ou `Argon2` utilisé
@@ -103,15 +103,15 @@
 
 ### 2.3 Cookies & Sessions
 
-- [ ] **Cookie de session avec HttpOnly** : `Set-Cookie: sessionId=...; HttpOnly; Secure; SameSite=Strict`
+- [x] **Cookie de session avec HttpOnly** : `Set-Cookie: sessionId=...; HttpOnly; Secure; SameSite=Strict`
 
-- [ ] **Attribut Secure activé** : Le cookie ne se transmet qu'en HTTPS
+- [x] **Attribut Secure activé** : Le cookie ne se transmet qu'en HTTPS
 
-- [ ] **SameSite configuré** : `SameSite=Strict` ou `Lax` (protège contre CSRF)
+- [x] **SameSite configuré** : `SameSite=Strict` ou `Lax` (protège contre CSRF)
 
-- [ ] **Expiration de session** : Timeout après 15-30 minutes d'inactivité
+- [x] **Expiration de session** : Timeout après 15-30 minutes d'inactivité
 
-- [ ] **Logout détruit la session** : Le bouton "Se déconnecter" supprime vraiment la session côté serveur
+- [x] **Logout détruit la session** : Le bouton "Se déconnecter" supprime vraiment la session côté serveur
 
 **Preuves attendues :**
 - Inspecteur réseau (Onglet Application > Cookies) montrant les flags
@@ -126,11 +126,11 @@
 
 ### 3.1 Rôles distincts
 
-- [ ] **Au minimum 2 rôles implémentés** : Exemple : `USER` et `ADMIN`
+- [x] **Au minimum 2 rôles implémentés** : Exemple : `USER` et `ADMIN`
   - Ou : `MANAGER`, `EMPLOYEE`, `VIEWER`
   - Ou : `AUTHOR`, `EDITOR`, `READER`
 
-- [ ] **Base de données** : Colonne `role` ou `roles` dans la table `users`
+- [x] **Base de données** : Colonne `role` ou `roles` dans la table `users`
 
 **Preuves attendues :**
 - Schéma de base de données montrant la table users avec la colonne role
@@ -140,11 +140,11 @@
 
 ### 3.2 Vérification d'accès sur chaque route
 
-- [ ] **Pas d'accès direct à une URL admin sans permission**
+- [x] **Pas d'accès direct à une URL admin sans permission**
   - Tentative : `/admin` sans être Admin → Rejet (403 Forbidden ou redirect)
   - Tentative : `/admin/delete-user/5` en tant qu'User → Rejet
 
-- [ ] **Vérification côté serveur** (pas seulement front-end)
+- [x] **Vérification côté serveur** (pas seulement front-end)
   - Le serveur valide les permissions avant de répondre
 
 **Preuves attendues :**
@@ -156,11 +156,11 @@
 
 ### 3.3 Pas de modification de données d'un autre utilisateur 
 
-- [ ] **L'utilisateur A ne peut pas voir/modifier les données de l'utilisateur B**
+- [x] **L'utilisateur A ne peut pas voir/modifier les données de l'utilisateur B**
   - Tentative : `/profil/user/15` → Rejet si vous n'êtes pas l'user 15
   - Tentative : `/mon-compte/editer` → Impossible d'éditer le compte d'un autre
 
-- [ ] **Vérification : `if (userId != loggedInUser) { deny(); }`**
+- [x] **Vérification : `if (userId != loggedInUser) { deny(); }`**
 
 **Preuves attendues :**
 - Code source montrant la vérification d'identité avant modification
@@ -174,14 +174,14 @@
 
 ### 4.1 Injection SQL - Requêtes préparées
 
-- [ ] **Aucune requête SQL concaténée** : Interdiction de faire `"SELECT * FROM users WHERE id=" + userId`
+- [x] **Aucune requête SQL concaténée** : Interdiction de faire `"SELECT * FROM users WHERE id=" + userId`
 
-- [ ] **Requêtes préparées utilisées systématiquement**
+- [x] **Requêtes préparées utilisées systématiquement**
   - Node + MySQL : `connection.query("SELECT * FROM users WHERE id = ?", [userId])`
   - PHP + PDO : `$stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?"); $stmt->execute([$userId]);`
   - Python + SQLite : `cursor.execute("SELECT * FROM users WHERE id = ?", (userId,))`
 
-- [ ] **ORM accepté comme alternative** : Doctrine, Eloquent, SQLAlchemy, Mongoose, etc.
+- [x] **ORM accepté comme alternative** : Doctrine, Eloquent, SQLAlchemy, Mongoose, etc.
 
 **Preuves attendues :**
 - Code source montrant les requêtes préparées (avec `?` ou `:paramName`)
@@ -191,7 +191,7 @@
 
 ### 4.2 Anti-XSS - Affichage sécurisé
 
-- [ ] **Toutes les données affichées sont échappées/encodées**
+- [x] **Toutes les données affichées sont échappées/encodées**
   - Framework auto : Twig `{{ variable }}` (auto-échappe), Blade, JSX
   - Manual : `htmlspecialchars($variable)`, `DOMPurify.sanitize()`, etc.
 
@@ -207,12 +207,12 @@
 
 ### 4.3 Validation des entrées
 
-- [ ] **Tous les champs de formulaire validés côté serveur** (pas juste front-end)
+- [x] **Tous les champs de formulaire validés côté serveur** (pas juste front-end)
   - Email : Format `name@domain.com`
   - Numéro : Uniquement des chiffres
   - Texte : Longueur min/max, caractères autorisés
 
-- [ ] **Rejet des données invalides** : Erreur lisible ou silencieux selon le contexte
+- [x] **Rejet des données invalides** : Erreur lisible ou silencieux selon le contexte
 
 **Preuves attendues :**
 - Code source montrant la validation (regex, libraires type `joi`, `validator.js`)
@@ -265,7 +265,7 @@
 
 ### 6.1 Minimisation des données
 
-- [ ] **Formulaire d'inscription minimal** : Seulement Email, Mot de passe, Nom (et rien de plus sans justification)
+- [x] **Formulaire d'inscription minimal** : Seulement Email, Mot de passe, Nom (et rien de plus sans justification)
   - **Interdiction** : Date de naissance, Numéro de Sécu, Adresse complète (sauf si nécessaire pour livraison)
 
 - [ ] **Justification documentée** : Pourquoi chaque champ est collecté
@@ -278,12 +278,12 @@
 
 ### 6.2 Consentement explicite
 
-- [ ] **Case à cocher pour consentement** (NON pré-cochée)
+- [x] **Case à cocher pour consentement** (NON pré-cochée)
   - `<input type="checkbox" name="consent" required>` (pas de `checked`)
 
-- [ ] **Texte clair du consentement** : "J'accepte que mes données soient utilisées pour [usage précis]"
+- [x] **Texte clair du consentement** : "J'accepte que mes données soient utilisées pour [usage précis]"
 
-- [ ] **Impossible d'envoyer le formulaire sans cocher** : Validation HTML `required` + serveur
+- [x] **Impossible d'envoyer le formulaire sans cocher** : Validation HTML `required` + serveur
 
 **Preuves attendues :**
 - Capture écran montrant la case décochée par défaut
@@ -294,16 +294,16 @@
 
 ### 6.3 Mentions légales & Politique de confidentialité
 
-- [ ] **Page de conformité accessible** : Lien visible dans le footer (`/legal`, `/privacy`, etc.)
+- [x] **Page de conformité accessible** : Lien visible dans le footer (`/legal`, `/privacy`, etc.)
 
-- [ ] **Contenu minimal**
+- [x] **Contenu minimal**
   - Qui gère le site (nom, adresse)
   - Quelles données sont collectées
   - À quoi elles servent
   - Durée de conservation
   - Droits des utilisateurs (accès, modification, suppression, portabilité)
 
-- [ ] **Lien dans le footer** : Visible sur toutes les pages
+- [x] **Lien dans le footer** : Visible sur toutes les pages
 
 **Preuves attendues :**
 - Capture écran du lien dans le footer
@@ -317,10 +317,10 @@
 
 ### 7.1 Headers de sécurité basiques
 
-- [ ] **X-Content-Type-Options: nosniff**
+- [x] **X-Content-Type-Options: nosniff**
   - Empêche le navigateur de deviner le type MIME
 
-- [ ] **X-Frame-Options: DENY** (ou SAMEORIGIN)
+- [x] **X-Frame-Options: DENY** (ou SAMEORIGIN)
   - Empêche l'affichage du site dans une iframe (Clickjacking)
 
 - [ ] **Content-Security-Policy** (Bonus, si possible)
@@ -335,9 +335,9 @@
 
 ### 7.2 Sécurité des cookies (redondance avec section 2.3)
 
-- [ ] **Secure flag** : `Set-Cookie: ... Secure`
-- [ ] **HttpOnly flag** : `Set-Cookie: ... HttpOnly`
-- [ ] **SameSite flag** : `Set-Cookie: ... SameSite=Strict`
+- [x] **Secure flag** : `Set-Cookie: ... Secure`
+- [x] **HttpOnly flag** : `Set-Cookie: ... HttpOnly`
+- [x] **SameSite flag** : `Set-Cookie: ... SameSite=Strict`
 
 ---
 
@@ -375,12 +375,12 @@
 
 ### 9.1 Audit automatique
 
-- [ ] **Scan de dépendances exécuté** : `npm audit`, `composer audit`, ou `snyk`
+- [x] **Scan de dépendances exécuté** : `npm audit`, `composer audit`, ou `snyk`
 
 - [ ] **Scan SAST (Static Analysis)** (Optionnel)
   - ESLint security plugin, SonarQube, Semgrep
 
-- [ ] **Pas de vulnérabilités critiques restantes**
+- [x] **Pas de vulnérabilités critiques restantes**
 
 **Preuves attendues :**
 - Rapport de scan (capture écran ou fichier)

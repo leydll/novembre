@@ -9,6 +9,25 @@ jest.mock("../../config/database", () => ({
   query: jest.fn(),
 }));
 
+// Helpers pour créer des objets req/res de test
+const createReq = (overrides = {}) => ({
+  body: {},
+  params: {},
+  user: {},
+  ...overrides,
+});
+
+const createRes = ({ withStatus = false } = {}) => {
+  const res = {};
+  if (withStatus) {
+    res.status = jest.fn(() => res);
+  }
+  // simulate Express cookie() chainable method used in authController
+  res.cookie = jest.fn(() => res);
+  res.json = jest.fn();
+  return res;
+};
+
 describe("Tests unitaires - controllers", () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -20,18 +39,15 @@ describe("Tests unitaires - controllers", () => {
       test("retourne 400 si email déjà existant", async () => {
         pool.query.mockResolvedValueOnce([[{ id: 1, email: "test@example.com" }]]);
 
-        const req = {
+        const req = createReq({
           body: {
             username: "testuser",
             email: "test@example.com",
             password: "ValidPassword123!",
             consent: "true",
           },
-        };
-        const res = {
-          status: jest.fn().mockReturnThis(),
-          json: jest.fn(),
-        };
+        });
+        const res = createRes({ withStatus: true });
 
         await authController.register(req, res);
 
@@ -47,18 +63,15 @@ describe("Tests unitaires - controllers", () => {
             [{ id: 1, username: "testuser", email: "test@example.com", role: "user" }],
           ]); // SELECT nouvel utilisateur
 
-        const req = {
+        const req = createReq({
           body: {
             username: "testuser",
             email: "test@example.com",
             password: "ValidPassword123!",
             consent: "true",
           },
-        };
-        const res = {
-          status: jest.fn().mockReturnThis(),
-          json: jest.fn(),
-        };
+        });
+        const res = createRes({ withStatus: true });
 
         await authController.register(req, res);
 
@@ -74,18 +87,15 @@ describe("Tests unitaires - controllers", () => {
       test("retourne 500 en cas d'erreur BDD", async () => {
         pool.query.mockRejectedValueOnce(new Error("Database error"));
 
-        const req = {
+        const req = createReq({
           body: {
             username: "testuser",
             email: "test@example.com",
             password: "ValidPassword123!",
             consent: "true",
           },
-        };
-        const res = {
-          status: jest.fn().mockReturnThis(),
-          json: jest.fn(),
-        };
+        });
+        const res = createRes({ withStatus: true });
 
         await authController.register(req, res);
 
@@ -96,11 +106,8 @@ describe("Tests unitaires - controllers", () => {
 
     describe("login", () => {
       test("retourne 400 si email ou mot de passe manquant", async () => {
-        const req = { body: {} };
-        const res = {
-          status: jest.fn().mockReturnThis(),
-          json: jest.fn(),
-        };
+        const req = createReq({ body: {} });
+        const res = createRes({ withStatus: true });
 
         await authController.login(req, res);
 
@@ -111,16 +118,13 @@ describe("Tests unitaires - controllers", () => {
       test("retourne 400 si utilisateur non trouvé", async () => {
         pool.query.mockResolvedValueOnce([[]]);
 
-        const req = {
+        const req = createReq({
           body: {
             email: "test@example.com",
             password: "password",
           },
-        };
-        const res = {
-          status: jest.fn().mockReturnThis(),
-          json: jest.fn(),
-        };
+        });
+        const res = createRes({ withStatus: true });
 
         await authController.login(req, res);
 
@@ -134,16 +138,13 @@ describe("Tests unitaires - controllers", () => {
           [{ id: 1, email: "test@example.com", password: hashed, role: "user" }],
         ]);
 
-        const req = {
+        const req = createReq({
           body: {
             email: "test@example.com",
             password: "wrongpassword",
           },
-        };
-        const res = {
-          status: jest.fn().mockReturnThis(),
-          json: jest.fn(),
-        };
+        });
+        const res = createRes({ withStatus: true });
 
         await authController.login(req, res);
 
@@ -154,16 +155,13 @@ describe("Tests unitaires - controllers", () => {
       test("retourne 500 en cas d'erreur BDD", async () => {
         pool.query.mockRejectedValueOnce(new Error("Database error"));
 
-        const req = {
+        const req = createReq({
           body: {
             email: "test@example.com",
             password: "password",
           },
-        };
-        const res = {
-          status: jest.fn().mockReturnThis(),
-          json: jest.fn(),
-        };
+        });
+        const res = createRes({ withStatus: true });
 
         await authController.login(req, res);
 
@@ -178,10 +176,8 @@ describe("Tests unitaires - controllers", () => {
           [{ id: 1, username: "testuser", email: "test@example.com", role: "user" }],
         ]);
 
-        const req = { user: { id: 1 } };
-        const res = {
-          json: jest.fn(),
-        };
+        const req = createReq({ user: { id: 1 } });
+        const res = createRes();
 
         await authController.me(req, res);
 
@@ -196,11 +192,8 @@ describe("Tests unitaires - controllers", () => {
       test("retourne 404 si utilisateur non trouvé", async () => {
         pool.query.mockResolvedValueOnce([[]]);
 
-        const req = { user: { id: 999 } };
-        const res = {
-          status: jest.fn().mockReturnThis(),
-          json: jest.fn(),
-        };
+        const req = createReq({ user: { id: 999 } });
+        const res = createRes({ withStatus: true });
 
         await authController.me(req, res);
 
@@ -211,11 +204,8 @@ describe("Tests unitaires - controllers", () => {
       test("retourne 500 en cas d'erreur", async () => {
         pool.query.mockRejectedValueOnce(new Error("Database error"));
 
-        const req = { user: { id: 1 } };
-        const res = {
-          status: jest.fn().mockReturnThis(),
-          json: jest.fn(),
-        };
+        const req = createReq({ user: { id: 1 } });
+        const res = createRes({ withStatus: true });
 
         await authController.me(req, res);
 
@@ -228,17 +218,14 @@ describe("Tests unitaires - controllers", () => {
       test("retourne 400 si email déjà utilisé", async () => {
         pool.query.mockResolvedValueOnce([[{ id: 2 }]]); // existing email for other user
 
-        const req = {
+        const req = createReq({
           user: { id: 1 },
           body: {
             username: "newname",
             email: "existing@example.com",
           },
-        };
-        const res = {
-          status: jest.fn().mockReturnThis(),
-          json: jest.fn(),
-        };
+        });
+        const res = createRes({ withStatus: true });
 
         await authController.updateMe(req, res);
 
@@ -256,16 +243,14 @@ describe("Tests unitaires - controllers", () => {
             [{ id: 1, username: "newname", email: "new@example.com", role: "user" }],
           ]); // SELECT updated user
 
-        const req = {
+        const req = createReq({
           user: { id: 1 },
           body: {
             username: "newname",
             email: "new@example.com",
           },
-        };
-        const res = {
-          json: jest.fn(),
-        };
+        });
+        const res = createRes();
 
         await authController.updateMe(req, res);
 
@@ -280,18 +265,15 @@ describe("Tests unitaires - controllers", () => {
       test("retourne 400 si mot de passe trop court", async () => {
         pool.query.mockResolvedValueOnce([[]]); // email disponible
 
-        const req = {
+        const req = createReq({
           user: { id: 1 },
           body: {
             username: "newname",
             email: "new@example.com",
             password: "short",
           },
-        };
-        const res = {
-          status: jest.fn().mockReturnThis(),
-          json: jest.fn(),
-        };
+        });
+        const res = createRes({ withStatus: true });
 
         await authController.updateMe(req, res);
 
@@ -309,17 +291,15 @@ describe("Tests unitaires - controllers", () => {
             [{ id: 1, username: "newname", email: "new@example.com", role: "user" }],
           ]); // SELECT updated user
 
-        const req = {
+        const req = createReq({
           user: { id: 1 },
           body: {
             username: "newname",
             email: "new@example.com",
             password: "NewPassword123!",
           },
-        };
-        const res = {
-          json: jest.fn(),
-        };
+        });
+        const res = createRes();
 
         await authController.updateMe(req, res);
 
@@ -334,17 +314,14 @@ describe("Tests unitaires - controllers", () => {
       test("retourne 500 en cas d'erreur", async () => {
         pool.query.mockRejectedValueOnce(new Error("Database error"));
 
-        const req = {
+        const req = createReq({
           user: { id: 1 },
           body: {
             username: "newname",
             email: "new@example.com",
           },
-        };
-        const res = {
-          status: jest.fn().mockReturnThis(),
-          json: jest.fn(),
-        };
+        });
+        const res = createRes({ withStatus: true });
 
         await authController.updateMe(req, res);
 
@@ -359,7 +336,7 @@ describe("Tests unitaires - controllers", () => {
       test("crée une recette avec succès", async () => {
         pool.query.mockResolvedValueOnce([{ insertId: 1 }]);
 
-        const req = {
+        const req = createReq({
           body: {
             title: "Test Recipe",
             description: "Desc",
@@ -368,11 +345,8 @@ describe("Tests unitaires - controllers", () => {
             steps: "step1, step2",
             user_id: 1,
           },
-        };
-        const res = {
-          status: jest.fn().mockReturnThis(),
-          json: jest.fn(),
-        };
+        });
+        const res = createRes({ withStatus: true });
 
         await recipesController.create(req, res);
 
@@ -383,7 +357,7 @@ describe("Tests unitaires - controllers", () => {
       test("retourne 500 en cas d'erreur", async () => {
         pool.query.mockRejectedValueOnce(new Error("Database error"));
 
-        const req = {
+        const req = createReq({
           body: {
             title: "Test Recipe",
             description: "Desc",
@@ -392,11 +366,8 @@ describe("Tests unitaires - controllers", () => {
             steps: "step1, step2",
             user_id: 1,
           },
-        };
-        const res = {
-          status: jest.fn().mockReturnThis(),
-          json: jest.fn(),
-        };
+        });
+        const res = createRes({ withStatus: true });
 
         await recipesController.create(req, res);
 
@@ -409,7 +380,7 @@ describe("Tests unitaires - controllers", () => {
       test("met à jour une recette", async () => {
         pool.query.mockResolvedValueOnce([{ affectedRows: 1 }]);
 
-        const req = {
+        const req = createReq({
           params: { id: "1" },
           body: {
             title: "Updated",
@@ -418,10 +389,8 @@ describe("Tests unitaires - controllers", () => {
             ingredients: "ing",
             steps: "steps",
           },
-        };
-        const res = {
-          json: jest.fn(),
-        };
+        });
+        const res = createRes();
 
         await recipesController.update(req, res);
 
@@ -431,7 +400,7 @@ describe("Tests unitaires - controllers", () => {
       test("retourne 500 en cas d'erreur", async () => {
         pool.query.mockRejectedValueOnce(new Error("Database error"));
 
-        const req = {
+        const req = createReq({
           params: { id: "1" },
           body: {
             title: "Updated",
@@ -440,11 +409,8 @@ describe("Tests unitaires - controllers", () => {
             ingredients: "ing",
             steps: "steps",
           },
-        };
-        const res = {
-          status: jest.fn().mockReturnThis(),
-          json: jest.fn(),
-        };
+        });
+        const res = createRes({ withStatus: true });
 
         await recipesController.update(req, res);
 
@@ -457,10 +423,8 @@ describe("Tests unitaires - controllers", () => {
       test("supprime une recette", async () => {
         pool.query.mockResolvedValueOnce([{ affectedRows: 1 }]);
 
-        const req = { params: { id: "1" } };
-        const res = {
-          json: jest.fn(),
-        };
+        const req = createReq({ params: { id: "1" } });
+        const res = createRes();
 
         await recipesController.delete(req, res);
 
@@ -470,11 +434,8 @@ describe("Tests unitaires - controllers", () => {
       test("retourne 500 en cas d'erreur", async () => {
         pool.query.mockRejectedValueOnce(new Error("Database error"));
 
-        const req = { params: { id: "1" } };
-        const res = {
-          status: jest.fn().mockReturnThis(),
-          json: jest.fn(),
-        };
+        const req = createReq({ params: { id: "1" } });
+        const res = createRes({ withStatus: true });
 
         await recipesController.delete(req, res);
 
@@ -487,11 +448,8 @@ describe("Tests unitaires - controllers", () => {
       test("like renvoie 201", async () => {
         pool.query.mockResolvedValueOnce([{ affectedRows: 1 }]);
 
-        const req = { user: { id: 1 }, params: { id: "1" } };
-        const res = {
-          status: jest.fn().mockReturnThis(),
-          json: jest.fn(),
-        };
+        const req = createReq({ user: { id: 1 }, params: { id: "1" } });
+        const res = createRes({ withStatus: true });
 
         await recipesController.like(req, res);
 
@@ -502,10 +460,8 @@ describe("Tests unitaires - controllers", () => {
       test("unlike renvoie succès", async () => {
         pool.query.mockResolvedValueOnce([{ affectedRows: 1 }]);
 
-        const req = { user: { id: 1 }, params: { id: "1" } };
-        const res = {
-          json: jest.fn(),
-        };
+        const req = createReq({ user: { id: 1 }, params: { id: "1" } });
+        const res = createRes();
 
         await recipesController.unlike(req, res);
 
@@ -514,14 +470,14 @@ describe("Tests unitaires - controllers", () => {
 
       test("isLiked renvoie liked: true / false", async () => {
         pool.query.mockResolvedValueOnce([[{ 1: 1 }]]);
-        const reqTrue = { user: { id: 1 }, params: { id: "1" } };
-        const resTrue = { json: jest.fn() };
+        const reqTrue = createReq({ user: { id: 1 }, params: { id: "1" } });
+        const resTrue = createRes();
         await recipesController.isLiked(reqTrue, resTrue);
         expect(resTrue.json).toHaveBeenCalledWith({ liked: true });
 
         pool.query.mockResolvedValueOnce([[]]);
-        const reqFalse = { user: { id: 1 }, params: { id: "1" } };
-        const resFalse = { json: jest.fn() };
+        const reqFalse = createReq({ user: { id: 1 }, params: { id: "1" } });
+        const resFalse = createRes();
         await recipesController.isLiked(reqFalse, resFalse);
         expect(resFalse.json).toHaveBeenCalledWith({ liked: false });
       });
