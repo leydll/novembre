@@ -19,7 +19,7 @@ describe("Tests d'intégration", () => {
     test("POST /auth/login avec email invalide -> 400", async () => {
       const res = await request(app).post("/auth/login").send({
         email: "not-an-email",
-        password: "somepassword",
+        password: "TestPwd_InvalEmail_123",
       });
       expect(res.status).toBe(400);
       expect(res.body.errors).toBeDefined();
@@ -240,7 +240,8 @@ describe("Tests d'intégration", () => {
         .send({
           username: "newname",
           email: "new@example.com",
-          password: "short", // Trop court
+          // Mot de passe trop court pour la règle (min 12 caractères)
+          password: "Sh0rt!", // 6 caractères seulement
         });
 
       expect(res.status).toBe(400);

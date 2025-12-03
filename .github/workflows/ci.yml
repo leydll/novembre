@@ -10,7 +10,7 @@ on:
 jobs:
   backend:
     defaults:
-      run:
+      runs-on:
         # toutes les commandes s'exécutent dans le dossier backend
         working-directory: backend
 
@@ -41,8 +41,8 @@ jobs:
       - run: npm run test:coverage
 
   frontend:
-    defaults:
-      run:
+    defaults runs-on:
+      runs-on:
         # toutes les commandes s'exécutent dans le dossier frontend
         working-directory: frontend
     steps:

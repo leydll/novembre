@@ -107,7 +107,7 @@ describe("Tests unitaires", () => {
         body: {
           username: "ab",
           email: "not-an-email",
-          password: "short",
+          password: "TestPwd_Short",
           consent: "false",
         },
       };
@@ -121,7 +121,7 @@ describe("Tests unitaires", () => {
         body: {
           username: "ab",
           email: "test@example.com",
-          password: "ValidPassword123!",
+          password: "TestPwd_Valid_123!",
           consent: "true",
         },
       };
@@ -135,7 +135,7 @@ describe("Tests unitaires", () => {
         body: {
           username: "a".repeat(51),
           email: "test@example.com",
-          password: "ValidPassword123!",
+          password: "TestPwd_Valid_123!",
           consent: "true",
         },
       };
@@ -163,7 +163,7 @@ describe("Tests unitaires", () => {
         body: {
           username: "testuser",
           email: "test@example.com",
-          password: "ValidPassword123!",
+          password: "TestPwd_Valid_123!",
           consent: "true",
         },
       };
@@ -216,7 +216,7 @@ describe("Tests unitaires", () => {
       const req = {
         body: {
           email: "test@example.com",
-          password: "somepassword",
+          password: "TestPwd_Login_123",
         },
       };
 
@@ -227,7 +227,8 @@ describe("Tests unitaires", () => {
     test("validateUpdateProfile valide le mot de passe si fourni", async () => {
       const req = {
         body: {
-          password: "short", // Trop court
+          // Mot de passe trop court pour la règle (min 12 caractères)
+          password: "Sh0rt!", // 6 caractères seulement
         },
       };
 
@@ -263,7 +264,7 @@ describe("Tests unitaires", () => {
         body: {
           username: "newname",
           email: "new@example.com",
-          password: "ValidPassword123!",
+          password: "TestPwd_Valid_123!",
         },
       };
 

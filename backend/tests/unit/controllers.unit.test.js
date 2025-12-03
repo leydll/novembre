@@ -43,7 +43,7 @@ describe("Tests unitaires - controllers", () => {
           body: {
             username: "testuser",
             email: "test@example.com",
-            password: "ValidPassword123!",
+            password: "TestPwd_Valid_123!",
             consent: "true",
           },
         });
@@ -67,7 +67,7 @@ describe("Tests unitaires - controllers", () => {
           body: {
             username: "testuser",
             email: "test@example.com",
-            password: "ValidPassword123!",
+            password: "TestPwd_Valid_123!",
             consent: "true",
           },
         });
@@ -91,7 +91,7 @@ describe("Tests unitaires - controllers", () => {
           body: {
             username: "testuser",
             email: "test@example.com",
-            password: "ValidPassword123!",
+            password: "TestPwd_Valid_123!",
             consent: "true",
           },
         });
@@ -121,7 +121,7 @@ describe("Tests unitaires - controllers", () => {
         const req = createReq({
           body: {
             email: "test@example.com",
-            password: "password",
+            password: "TestPwd_UserNotFound",
           },
         });
         const res = createRes({ withStatus: true });
@@ -133,7 +133,7 @@ describe("Tests unitaires - controllers", () => {
       });
 
       test("retourne 400 si mot de passe incorrect", async () => {
-        const hashed = await bcrypt.hash("correctpassword", 10);
+        const hashed = await bcrypt.hash("TestPwd_Correct_123!", 10);
         pool.query.mockResolvedValueOnce([
           [{ id: 1, email: "test@example.com", password: hashed, role: "user" }],
         ]);
@@ -141,7 +141,7 @@ describe("Tests unitaires - controllers", () => {
         const req = createReq({
           body: {
             email: "test@example.com",
-            password: "wrongpassword",
+            password: "TestPwd_Wrong_123",
           },
         });
         const res = createRes({ withStatus: true });
@@ -158,7 +158,7 @@ describe("Tests unitaires - controllers", () => {
         const req = createReq({
           body: {
             email: "test@example.com",
-            password: "password",
+            password: "TestPwd_DbError_123",
           },
         });
         const res = createRes({ withStatus: true });
@@ -270,7 +270,8 @@ describe("Tests unitaires - controllers", () => {
           body: {
             username: "newname",
             email: "new@example.com",
-            password: "short",
+            // mot de passe volontairement trop court (< 6 caractères pour la logique du contrôleur)
+            password: "sh0rt",
           },
         });
         const res = createRes({ withStatus: true });
@@ -296,7 +297,7 @@ describe("Tests unitaires - controllers", () => {
           body: {
             username: "newname",
             email: "new@example.com",
-            password: "NewPassword123!",
+            password: "TestPwd_New_123!",
           },
         });
         const res = createRes();
