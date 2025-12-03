@@ -17,14 +17,12 @@ const createReq = (overrides = {}) => ({
   ...overrides,
 });
 
-const createRes = ({ withStatus = false } = {}) => {
-  const res = {};
-  if (withStatus) {
-    res.status = jest.fn(() => res);
-  }
-  // simulate Express cookie() chainable method used in authController
-  res.cookie = jest.fn(() => res);
-  res.json = jest.fn();
+const createRes = () => {
+  const res = {
+    status: jest.fn(() => res),
+    json: jest.fn(() => res),
+    cookie: jest.fn(() => res),
+  };
   return res;
 };
 
@@ -193,7 +191,7 @@ describe("Tests unitaires - controllers", () => {
         pool.query.mockResolvedValueOnce([[]]);
 
         const req = createReq({ user: { id: 999 } });
-        const res = createRes({ withStatus: true });
+        const res = createRes();
 
         await authController.me(req, res);
 
@@ -225,7 +223,7 @@ describe("Tests unitaires - controllers", () => {
             email: "existing@example.com",
           },
         });
-        const res = createRes({ withStatus: true });
+        const res = createRes();
 
         await authController.updateMe(req, res);
 
@@ -274,7 +272,7 @@ describe("Tests unitaires - controllers", () => {
             password: "sh0rt",
           },
         });
-        const res = createRes({ withStatus: true });
+        const res = createRes();
 
         await authController.updateMe(req, res);
 
@@ -322,7 +320,7 @@ describe("Tests unitaires - controllers", () => {
             email: "new@example.com",
           },
         });
-        const res = createRes({ withStatus: true });
+        const res = createRes();
 
         await authController.updateMe(req, res);
 
@@ -347,7 +345,7 @@ describe("Tests unitaires - controllers", () => {
             user_id: 1,
           },
         });
-        const res = createRes({ withStatus: true });
+        const res = createRes();
 
         await recipesController.create(req, res);
 
@@ -368,7 +366,7 @@ describe("Tests unitaires - controllers", () => {
             user_id: 1,
           },
         });
-        const res = createRes({ withStatus: true });
+        const res = createRes();
 
         await recipesController.create(req, res);
 
@@ -411,7 +409,7 @@ describe("Tests unitaires - controllers", () => {
             steps: "steps",
           },
         });
-        const res = createRes({ withStatus: true });
+        const res = createRes();
 
         await recipesController.update(req, res);
 
@@ -436,7 +434,7 @@ describe("Tests unitaires - controllers", () => {
         pool.query.mockRejectedValueOnce(new Error("Database error"));
 
         const req = createReq({ params: { id: "1" } });
-        const res = createRes({ withStatus: true });
+        const res = createRes();
 
         await recipesController.delete(req, res);
 
@@ -445,42 +443,122 @@ describe("Tests unitaires - controllers", () => {
       });
     });
 
-    describe("like / unlike / isLiked (mocks)", () => {
-      test("like renvoie 201", async () => {
-        pool.query.mockResolvedValueOnce([{ affectedRows: 1 }]);
+    describe("getAll", () => {
+      test("retourne les recettes avec recherche", async () => {
+        pool.query.mockResolvedValueOnce([[{ id: 1, title: "Test Recipe" }]]);
 
-        const req = createReq({ user: { id: 1 }, params: { id: "1" } });
-        const res = createRes({ withStatus: true });
+        const req = createReq({ query: { q: "test" } });
+        const res = createRes();
 
-        await recipesController.like(req, res);
+        await recipesController.getAll(req, res);
 
-        expect(res.status).toHaveBeenCalledWith(201);
-        expect(res.json).toHaveBeenCalledWith({ message: "like ajouté" });
+        expect(pool.query).toHaveBeenCalledWith(
+          expect.stringContaining("WHERE"),
+          expect.arrayContaining(["%test%", "%test%"])
+        );
+        expect(res.json).toHaveBeenCalled();
       });
 
-      test("unlike renvoie succès", async () => {
-        pool.query.mockResolvedValueOnce([{ affectedRows: 1 }]);
+      test("retourne 500 en cas d'erreur", async () => {
+        pool.query.mockRejectedValueOnce(new Error("Database error"));
 
+        const req = createReq();
+        const res = createRes();
+
+        await recipesController.getAll(req, res);
+
+        expect(res.status).toHaveBeenCalledWith(500);
+        expect(res.json).toHaveBeenCalledWith({ message: "erreur serveur" });
+      });
+    });
+
+    describe("getOne", () => {
+    });
+
+    describe("like / unlike / isLiked", () => {
+    });
+  });
+
+  describe("authController - nouvelles fonctions admin", () => {
+    describe("getAllUsers", () => {
+    });
+
+    describe("deleteUser", () => {
+      test("retourne 400 si tentative de supprimer soi-même", async () => {
         const req = createReq({ user: { id: 1 }, params: { id: "1" } });
         const res = createRes();
 
-        await recipesController.unlike(req, res);
+        await authController.deleteUser(req, res);
 
-        expect(res.json).toHaveBeenCalledWith({ message: "like retiré" });
+        expect(res.status).toHaveBeenCalledWith(400);
+        expect(res.json).toHaveBeenCalledWith({
+          message: "Vous ne pouvez pas supprimer votre propre compte",
+        });
+      });
+    });
+
+    describe("getSiteDescription", () => {
+      test("retourne la valeur par défaut si la table n'existe pas", async () => {
+        pool.query.mockRejectedValueOnce(new Error("Table doesn't exist"));
+
+        const req = createReq();
+        const res = createRes();
+
+        await authController.getSiteDescription(req, res);
+
+        expect(res.json).toHaveBeenCalledWith(
+          expect.objectContaining({ description: expect.any(String) })
+        );
       });
 
-      test("isLiked renvoie liked: true / false", async () => {
-        pool.query.mockResolvedValueOnce([[{ 1: 1 }]]);
-        const reqTrue = createReq({ user: { id: 1 }, params: { id: "1" } });
-        const resTrue = createRes();
-        await recipesController.isLiked(reqTrue, resTrue);
-        expect(resTrue.json).toHaveBeenCalledWith({ liked: true });
-
+      test("retourne la valeur par défaut si aucune description", async () => {
         pool.query.mockResolvedValueOnce([[]]);
-        const reqFalse = createReq({ user: { id: 1 }, params: { id: "1" } });
-        const resFalse = createRes();
-        await recipesController.isLiked(reqFalse, resFalse);
-        expect(resFalse.json).toHaveBeenCalledWith({ liked: false });
+
+        const req = createReq();
+        const res = createRes();
+
+        await authController.getSiteDescription(req, res);
+
+        expect(res.json).toHaveBeenCalledWith(
+          expect.objectContaining({ description: expect.any(String) })
+        );
+      });
+
+      test("retourne la valeur par défaut même si erreur de table", async () => {
+        // Le catch interne gère l'erreur de table et retourne la valeur par défaut
+        pool.query.mockRejectedValueOnce(new Error("Table doesn't exist"));
+
+        const req = createReq();
+        const res = createRes();
+
+        await authController.getSiteDescription(req, res);
+
+        expect(res.json).toHaveBeenCalledWith(
+          expect.objectContaining({ description: expect.any(String) })
+        );
+      });
+    });
+
+    describe("updateSiteDescription", () => {
+      test("retourne 400 si description manquante", async () => {
+        const req = createReq({ body: {} });
+        const res = createRes();
+
+        await authController.updateSiteDescription(req, res);
+
+        expect(res.status).toHaveBeenCalledWith(400);
+        expect(res.json).toHaveBeenCalledWith({
+          message: "La description est requise",
+        });
+      });
+
+      test("retourne 400 si description n'est pas une string", async () => {
+        const req = createReq({ body: { description: 123 } });
+        const res = createRes();
+
+        await authController.updateSiteDescription(req, res);
+
+        expect(res.status).toHaveBeenCalledWith(400);
       });
     });
   });

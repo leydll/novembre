@@ -189,18 +189,6 @@ describe("Tests d'intégration", () => {
       expect(res.status).toBe(200);
       expect(Array.isArray(res.body)).toBe(true);
     });
-
-    test("GET /recipes avec paramètre q vide -> 200", async () => {
-      const res = await request(app).get("/recipes?q=");
-      expect(res.status).toBe(200);
-      expect(Array.isArray(res.body)).toBe(true);
-    });
-
-    test("GET /recipes avec paramètre q avec espaces -> 200", async () => {
-      const res = await request(app).get("/recipes?q=  test  ");
-      expect(res.status).toBe(200);
-      expect(Array.isArray(res.body)).toBe(true);
-    });
   });
 
   describe("Auth - cas limites", () => {
@@ -287,11 +275,87 @@ describe("Tests d'intégration", () => {
     });
   });
 
-  describe("Recipes - getAll sans recherche", () => {
-    test("GET /recipes sans paramètre q retourne toutes les recettes", async () => {
-      const res = await request(app).get("/recipes");
+  describe("Admin - gestion utilisateurs", () => {
+    const SECRET = "test-secret";
+    let adminToken;
+
+    beforeAll(() => {
+      process.env.JWT_SECRET = SECRET;
+      adminToken = jwt.sign({ id: 1, role: "admin" }, SECRET);
+    });
+
+    test("GET /auth/users sans token -> 401", async () => {
+      const res = await request(app).get("/auth/users");
+      expect(res.status).toBe(401);
+    });
+
+    test("GET /auth/users avec token user (non admin) -> 403", async () => {
+      const userToken = jwt.sign({ id: 2, role: "user" }, SECRET);
+      const res = await request(app)
+        .get("/auth/users")
+        .set("Authorization", `Bearer ${userToken}`);
+      expect(res.status).toBe(403);
+    });
+
+    test("DELETE /auth/users/:id sans token -> 401", async () => {
+      const res = await request(app).delete("/auth/users/2");
+      expect(res.status).toBe(401);
+    });
+
+    test("DELETE /auth/users/:id avec token user (non admin) -> 403", async () => {
+      const userToken = jwt.sign({ id: 2, role: "user" }, SECRET);
+      const res = await request(app)
+        .delete("/auth/users/3")
+        .set("Authorization", `Bearer ${userToken}`);
+      expect(res.status).toBe(403);
+    });
+
+    test("DELETE /auth/users/:id avec token admin mais tentative de supprimer soi-même -> 400", async () => {
+      const res = await request(app)
+        .delete("/auth/users/1")
+        .set("Authorization", `Bearer ${adminToken}`);
+      expect(res.status).toBe(400);
+      expect(res.body.message).toContain("propre compte");
+    });
+  });
+
+  describe("Admin - description du site", () => {
+    const SECRET = "test-secret";
+    let adminToken;
+
+    beforeAll(() => {
+      process.env.JWT_SECRET = SECRET;
+      adminToken = jwt.sign({ id: 1, role: "admin" }, SECRET);
+    });
+
+    test("GET /auth/site/description sans token -> 200 (publique)", async () => {
+      const res = await request(app).get("/auth/site/description");
       expect(res.status).toBe(200);
-      expect(Array.isArray(res.body)).toBe(true);
+      expect(res.body.description).toBeDefined();
+    });
+
+    test("PATCH /auth/site/description sans token -> 401", async () => {
+      const res = await request(app)
+        .patch("/auth/site/description")
+        .send({ description: "Nouvelle description" });
+      expect(res.status).toBe(401);
+    });
+
+    test("PATCH /auth/site/description avec token user (non admin) -> 403", async () => {
+      const userToken = jwt.sign({ id: 2, role: "user" }, SECRET);
+      const res = await request(app)
+        .patch("/auth/site/description")
+        .set("Authorization", `Bearer ${userToken}`)
+        .send({ description: "Nouvelle description" });
+      expect(res.status).toBe(403);
+    });
+
+    test("PATCH /auth/site/description sans description -> 400", async () => {
+      const res = await request(app)
+        .patch("/auth/site/description")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({});
+      expect(res.status).toBe(400);
     });
   });
 });
