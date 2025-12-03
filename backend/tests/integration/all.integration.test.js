@@ -20,7 +20,7 @@ describe("Tests d'intégration", () => {
       const res = await request(app).post("/auth/register").send({
         username: "ab", // Trop court
         email: "not-an-email", // Email invalide
-        password: "short", // Trop court
+        password: "shortMDP", // Absence de caractère spécial
         consent: "false", // Consentement non donné
       });
       expect(res.status).toBe(400);
