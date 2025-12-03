@@ -9,9 +9,9 @@ on:
 
 jobs:
   backend:
+    runs-on: macos-latest
     defaults:
-      runs-on:
-        # toutes les commandes s'exécutent dans le dossier backend
+      run:
         working-directory: backend
 
     steps:
@@ -28,8 +28,8 @@ jobs:
           # chemin vers le fichier package-lock.json pour le cache
           cache-dependency-path: backend/package-lock.json
 
-      # installer les dépendances 
-      - run: npm install
+      # installer les dépendances (npm ci pour une installation reproductible en CI)
+      - run: npm ci
       
       # ESLint : détecte les erreurs de syntaxe et les mauvaises pratiques
       - run: npm run lint
@@ -37,14 +37,15 @@ jobs:
       # vérifier le formatage du code avec Prettier 
       - run: npm run prettier
       
-      # exécuter les tests avec couverture de code <= 80% 
+      # exécuter les tests avec couverture de code >= 80% 
       - run: npm run test:coverage
 
   frontend:
-    defaults runs-on:
-      runs-on:
-        # toutes les commandes s'exécutent dans le dossier frontend
+    runs-on: macos-latest
+    defaults:
+      run:
         working-directory: frontend
+
     steps:
       # récupérer le code source depuis le dépôt GitHub
       - uses: actions/checkout@v4
@@ -56,8 +57,8 @@ jobs:
           cache: 'npm'
           cache-dependency-path: frontend/package-lock.json
 
-      # installer les dépendances 
-      - run: npm install
+      # installer les dépendances (npm ci pour une installation reproductible en CI)
+      - run: npm ci
       
       # vérifier le code avec ESLint 
       - run: npm run lint
@@ -65,7 +66,7 @@ jobs:
       # vérifier le formatage du code avec Prettier 
       - run: npm run prettier
       
-      # lancer le projet frontend 
-      - run: npm run dev
+      # vérifier que le build fonctionne (au lieu de lancer le serveur de dev)
+      - run: npm run build
 
 
