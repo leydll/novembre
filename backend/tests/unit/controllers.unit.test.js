@@ -35,7 +35,9 @@ describe("Tests unitaires - controllers", () => {
   describe("authController", () => {
     describe("register", () => {
       test("retourne 400 si email déjà existant", async () => {
-        pool.query.mockResolvedValueOnce([[{ id: 1, email: "test@example.com" }]]);
+        pool.query.mockResolvedValueOnce([
+          [{ id: 1, email: "test@example.com" }],
+        ]);
 
         const req = createReq({
           body: {
@@ -50,7 +52,9 @@ describe("Tests unitaires - controllers", () => {
         await authController.register(req, res);
 
         expect(res.status).toHaveBeenCalledWith(400);
-        expect(res.json).toHaveBeenCalledWith({ message: "Email déjà existant" });
+        expect(res.json).toHaveBeenCalledWith({
+          message: "Email déjà existant",
+        });
       });
 
       test("crée un utilisateur avec succès", async () => {
@@ -58,7 +62,14 @@ describe("Tests unitaires - controllers", () => {
           .mockResolvedValueOnce([[]]) // SELECT email -> vide
           .mockResolvedValueOnce([{ insertId: 1 }]) // INSERT
           .mockResolvedValueOnce([
-            [{ id: 1, username: "testuser", email: "test@example.com", role: "user" }],
+            [
+              {
+                id: 1,
+                username: "testuser",
+                email: "test@example.com",
+                role: "user",
+              },
+            ],
           ]); // SELECT nouvel utilisateur
 
         const req = createReq({
@@ -78,7 +89,7 @@ describe("Tests unitaires - controllers", () => {
           expect.objectContaining({
             message: "Utilisateur créé",
             token: expect.any(String),
-          }),
+          })
         );
       });
 
@@ -110,7 +121,9 @@ describe("Tests unitaires - controllers", () => {
         await authController.login(req, res);
 
         expect(res.status).toHaveBeenCalledWith(400);
-        expect(res.json).toHaveBeenCalledWith({ message: "Email et mot de passe requis" });
+        expect(res.json).toHaveBeenCalledWith({
+          message: "Email et mot de passe requis",
+        });
       });
 
       test("retourne 400 si utilisateur non trouvé", async () => {
@@ -127,13 +140,22 @@ describe("Tests unitaires - controllers", () => {
         await authController.login(req, res);
 
         expect(res.status).toHaveBeenCalledWith(400);
-        expect(res.json).toHaveBeenCalledWith({ message: "Email ou mot de passe incorrect" });
+        expect(res.json).toHaveBeenCalledWith({
+          message: "Email ou mot de passe incorrect",
+        });
       });
 
       test("retourne 400 si mot de passe incorrect", async () => {
         const hashed = await bcrypt.hash("TestPwd_Correct_123!", 10);
         pool.query.mockResolvedValueOnce([
-          [{ id: 1, email: "test@example.com", password: hashed, role: "user" }],
+          [
+            {
+              id: 1,
+              email: "test@example.com",
+              password: hashed,
+              role: "user",
+            },
+          ],
         ]);
 
         const req = createReq({
@@ -147,7 +169,9 @@ describe("Tests unitaires - controllers", () => {
         await authController.login(req, res);
 
         expect(res.status).toHaveBeenCalledWith(400);
-        expect(res.json).toHaveBeenCalledWith({ message: "Email ou mot de passe incorrect" });
+        expect(res.json).toHaveBeenCalledWith({
+          message: "Email ou mot de passe incorrect",
+        });
       });
 
       test("retourne 500 en cas d'erreur BDD", async () => {
@@ -171,7 +195,14 @@ describe("Tests unitaires - controllers", () => {
     describe("me", () => {
       test("retourne les infos utilisateur", async () => {
         pool.query.mockResolvedValueOnce([
-          [{ id: 1, username: "testuser", email: "test@example.com", role: "user" }],
+          [
+            {
+              id: 1,
+              username: "testuser",
+              email: "test@example.com",
+              role: "user",
+            },
+          ],
         ]);
 
         const req = createReq({ user: { id: 1 } });
@@ -196,7 +227,9 @@ describe("Tests unitaires - controllers", () => {
         await authController.me(req, res);
 
         expect(res.status).toHaveBeenCalledWith(404);
-        expect(res.json).toHaveBeenCalledWith({ message: "Utilisateur non trouvé" });
+        expect(res.json).toHaveBeenCalledWith({
+          message: "Utilisateur non trouvé",
+        });
       });
 
       test("retourne 500 en cas d'erreur", async () => {
@@ -238,7 +271,14 @@ describe("Tests unitaires - controllers", () => {
           .mockResolvedValueOnce([[]]) // email disponible
           .mockResolvedValueOnce([{ affectedRows: 1 }]) // UPDATE
           .mockResolvedValueOnce([
-            [{ id: 1, username: "newname", email: "new@example.com", role: "user" }],
+            [
+              {
+                id: 1,
+                username: "newname",
+                email: "new@example.com",
+                role: "user",
+              },
+            ],
           ]); // SELECT updated user
 
         const req = createReq({
@@ -287,7 +327,14 @@ describe("Tests unitaires - controllers", () => {
           .mockResolvedValueOnce([[]]) // email disponible
           .mockResolvedValueOnce([{ affectedRows: 1 }]) // UPDATE
           .mockResolvedValueOnce([
-            [{ id: 1, username: "newname", email: "new@example.com", role: "user" }],
+            [
+              {
+                id: 1,
+                username: "newname",
+                email: "new@example.com",
+                role: "user",
+              },
+            ],
           ]); // SELECT updated user
 
         const req = createReq({
@@ -350,7 +397,10 @@ describe("Tests unitaires - controllers", () => {
         await recipesController.create(req, res);
 
         expect(res.status).toHaveBeenCalledWith(201);
-        expect(res.json).toHaveBeenCalledWith({ message: "recette créée", id: 1 });
+        expect(res.json).toHaveBeenCalledWith({
+          message: "recette créée",
+          id: 1,
+        });
       });
 
       test("retourne 500 en cas d'erreur", async () => {
@@ -393,7 +443,9 @@ describe("Tests unitaires - controllers", () => {
 
         await recipesController.update(req, res);
 
-        expect(res.json).toHaveBeenCalledWith({ message: "recette mise à jour" });
+        expect(res.json).toHaveBeenCalledWith({
+          message: "recette mise à jour",
+        });
       });
 
       test("retourne 500 en cas d'erreur", async () => {
@@ -472,16 +524,13 @@ describe("Tests unitaires - controllers", () => {
       });
     });
 
-    describe("getOne", () => {
-    });
+    describe("getOne", () => {});
 
-    describe("like / unlike / isLiked", () => {
-    });
+    describe("like / unlike / isLiked", () => {});
   });
 
   describe("authController - nouvelles fonctions admin", () => {
-    describe("getAllUsers", () => {
-    });
+    describe("getAllUsers", () => {});
 
     describe("deleteUser", () => {
       test("retourne 400 si tentative de supprimer soi-même", async () => {
@@ -563,5 +612,3 @@ describe("Tests unitaires - controllers", () => {
     });
   });
 });
-
-

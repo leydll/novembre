@@ -10,7 +10,7 @@ export default function Navbar({ user, setUser }) {
     try {
       // Demande au backend d'effacer le cookie HttpOnly
       await api.post("/auth/logout");
-    } catch (_e) {
+    } catch {
       // On ignore les erreurs ici, on nettoie côté client quoi qu'il arrive
     }
     localStorage.removeItem("token");

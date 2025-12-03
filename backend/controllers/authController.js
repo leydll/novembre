@@ -13,7 +13,9 @@ exports.register = async (req, res) => {
 
   try {
     // Vérifier si l'utilisateur existe déjà
-    const [existing] = await pool.query("SELECT * FROM users WHERE email = ?", [email]);
+    const [existing] = await pool.query("SELECT * FROM users WHERE email = ?", [
+      email,
+    ]);
     if (existing.length) {
       return res.status(400).json({ message: "Email déjà existant" });
     }
@@ -28,12 +30,19 @@ exports.register = async (req, res) => {
     );
 
     // Récupérer l'utilisateur créé avec son role
-    const [newUser] = await pool.query("SELECT id, username, email, role FROM users WHERE id = ?", [result.insertId]);
+    const [newUser] = await pool.query(
+      "SELECT id, username, email, role FROM users WHERE id = ?",
+      [result.insertId]
+    );
 
     // Générer un token JWT avec id et role
-    const token = jwt.sign({ id: newUser[0].id, role: newUser[0].role }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
-    });
+    const token = jwt.sign(
+      { id: newUser[0].id, role: newUser[0].role },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "1h",
+      }
+    );
 
     // Déposer le token dans un cookie HttpOnly + Secure + SameSite
     const isProd = process.env.NODE_ENV === "production";
@@ -61,20 +70,31 @@ exports.login = async (req, res) => {
   }
 
   try {
-    const [users] = await pool.query("SELECT * FROM users WHERE email = ?", [email]);
+    const [users] = await pool.query("SELECT * FROM users WHERE email = ?", [
+      email,
+    ]);
     if (!users.length) {
-      return res.status(400).json({ message: "Email ou mot de passe incorrect" });
+      return res
+        .status(400)
+        .json({ message: "Email ou mot de passe incorrect" });
     }
 
     const user = users[0];
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(400).json({ message: "Email ou mot de passe incorrect" });
+      return res
+        .status(400)
+        .json({ message: "Email ou mot de passe incorrect" });
     }
 
-    const token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "1h" });
+    const token = jwt.sign(
+      { id: user.id, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
 
-    const isProd = process.env.NODE_ENV !== "test" && process.env.NODE_ENV === "production";
+    const isProd =
+      process.env.NODE_ENV !== "test" && process.env.NODE_ENV === "production";
     return res
       .cookie("auth", token, {
         httpOnly: true,
@@ -92,7 +112,10 @@ exports.login = async (req, res) => {
 // Récupérer les infos de l'utilisateur connecté
 exports.me = async (req, res) => {
   try {
-    const [users] = await pool.query("SELECT id, username, email, role FROM users WHERE id = ?", [req.user.id]);
+    const [users] = await pool.query(
+      "SELECT id, username, email, role FROM users WHERE id = ?",
+      [req.user.id]
+    );
     if (!users.length) {
       return res.status(404).json({ message: "Utilisateur non trouvé" });
     }
@@ -109,9 +132,14 @@ exports.updateMe = async (req, res) => {
 
   try {
     // Vérifier que l'email n'est pas déjà utilisé par un autre utilisateur
-    const [existing] = await pool.query("SELECT id FROM users WHERE email = ? AND id <> ?", [email, userId]);
+    const [existing] = await pool.query(
+      "SELECT id FROM users WHERE email = ? AND id <> ?",
+      [email, userId]
+    );
     if (existing.length) {
-      return res.status(400).json({ message: "Cet email est déjà utilisé par un autre compte" });
+      return res
+        .status(400)
+        .json({ message: "Cet email est déjà utilisé par un autre compte" });
     }
 
     // Construire dynamiquement la requête UPDATE
@@ -120,7 +148,9 @@ exports.updateMe = async (req, res) => {
 
     if (password && password.trim() !== "") {
       if (password.length < 6) {
-        return res.status(400).json({ message: "Le mot de passe doit faire au moins 6 caractères" });
+        return res.status(400).json({
+          message: "Le mot de passe doit faire au moins 6 caractères",
+        });
       }
       const hashedPassword = await bcrypt.hash(password, 10);
       sql += ", password = ?";
@@ -133,7 +163,10 @@ exports.updateMe = async (req, res) => {
     await pool.query(sql, params);
 
     // Renvoyer les infos mises à jour
-    const [users] = await pool.query("SELECT id, username, email, role FROM users WHERE id = ?", [userId]);
+    const [users] = await pool.query(
+      "SELECT id, username, email, role FROM users WHERE id = ?",
+      [userId]
+    );
 
     return res.json(users[0]);
   } catch (err) {
@@ -144,7 +177,9 @@ exports.updateMe = async (req, res) => {
 // Récupérer tous les utilisateurs (admin seulement)
 exports.getAllUsers = async (req, res) => {
   try {
-    const [users] = await pool.query("SELECT id, username, email, role FROM users ORDER BY id DESC");
+    const [users] = await pool.query(
+      "SELECT id, username, email, role FROM users ORDER BY id DESC"
+    );
     return res.json(users);
   } catch (err) {
     return handleServerError(res, err);
@@ -158,7 +193,9 @@ exports.deleteUser = async (req, res) => {
   try {
     // Empêcher la suppression de soi-même
     if (parseInt(userId) === req.user.id) {
-      return res.status(400).json({ message: "Vous ne pouvez pas supprimer votre propre compte" });
+      return res
+        .status(400)
+        .json({ message: "Vous ne pouvez pas supprimer votre propre compte" });
     }
 
     await pool.query("DELETE FROM users WHERE id = ?", [userId]);
@@ -173,17 +210,22 @@ exports.getSiteDescription = async (req, res) => {
   try {
     // Vérifier si la table existe, sinon retourner la valeur par défaut
     try {
-      const [rows] = await pool.query("SELECT value FROM site_settings WHERE key_name = 'description' LIMIT 1");
+      const [rows] = await pool.query(
+        "SELECT value FROM site_settings WHERE key_name = 'description' LIMIT 1"
+      );
       if (rows.length) {
         return res.json({ description: rows[0].value });
       }
     } catch (tableErr) {
       // Si la table n'existe pas, retourner la valeur par défaut
-      console.log("Table site_settings n'existe pas encore, utilisation de la valeur par défaut");
+      console.log(
+        "Table site_settings n'existe pas encore, utilisation de la valeur par défaut"
+      );
     }
     // Valeur par défaut
-    return res.json({ 
-      description: "Bienvenue sur bakesomecaakes, votre destination gourmande pour découvrir et partager les meilleures recettes de pâtisserie ! Que vous soyez débutant ou pâtissier confirmé, vous trouverez ici des recettes détaillées, des conseils pratiques et une communauté passionnée par l'art de la pâtisserie. Explorez nos recettes, créez vos propres créations et partagez vos expériences avec d'autres amateurs de douceurs."
+    return res.json({
+      description:
+        "Bienvenue sur bakesomecaakes, votre destination gourmande pour découvrir et partager les meilleures recettes de pâtisserie ! Que vous soyez débutant ou pâtissier confirmé, vous trouverez ici des recettes détaillées, des conseils pratiques et une communauté passionnée par l'art de la pâtisserie. Explorez nos recettes, créez vos propres créations et partagez vos expériences avec d'autres amateurs de douceurs.",
     });
   } catch (err) {
     console.error("Erreur getSiteDescription:", err);
@@ -195,7 +237,7 @@ exports.getSiteDescription = async (req, res) => {
 exports.updateSiteDescription = async (req, res) => {
   const { description } = req.body;
 
-  if (!description || typeof description !== 'string') {
+  if (!description || typeof description !== "string") {
     return res.status(400).json({ message: "La description est requise" });
   }
 
@@ -212,14 +254,22 @@ exports.updateSiteDescription = async (req, res) => {
     `);
 
     // Vérifier si la clé existe
-    const [existing] = await pool.query("SELECT id FROM site_settings WHERE key_name = 'description' LIMIT 1");
-    
+    const [existing] = await pool.query(
+      "SELECT id FROM site_settings WHERE key_name = 'description' LIMIT 1"
+    );
+
     if (existing.length) {
-      await pool.query("UPDATE site_settings SET value = ? WHERE key_name = 'description'", [description]);
+      await pool.query(
+        "UPDATE site_settings SET value = ? WHERE key_name = 'description'",
+        [description]
+      );
     } else {
-      await pool.query("INSERT INTO site_settings (key_name, value) VALUES ('description', ?)", [description]);
+      await pool.query(
+        "INSERT INTO site_settings (key_name, value) VALUES ('description', ?)",
+        [description]
+      );
     }
-    
+
     return res.json({ message: "Description mise à jour", description });
   } catch (err) {
     console.error("Erreur updateSiteDescription:", err);

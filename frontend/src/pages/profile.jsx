@@ -95,7 +95,6 @@ export default function Profile({ user, setUser }) {
       loadRecipes();
       loadSiteDescription();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAdmin]);
 
   const handleUpdateDescription = async () => {

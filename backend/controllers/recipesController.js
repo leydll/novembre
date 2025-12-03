@@ -40,7 +40,8 @@ exports.getOne = async (req, res) => {
        WHERE r.id = ?`,
       [req.params.id]
     );
-    if (!recipes.length) return res.status(404).json({ message: "recette non trouvée" });
+    if (!recipes.length)
+      return res.status(404).json({ message: "recette non trouvée" });
     return res.json(recipes[0]);
   } catch (err) {
     return handleServerError(res, err);
@@ -55,7 +56,9 @@ exports.create = async (req, res) => {
       "INSERT INTO recipes (title, description, image, ingredients, steps, user_id) VALUES (?, ?, ?, ?, ?, ?)",
       [title, description, image, ingredients, steps, user_id]
     );
-    return res.status(201).json({ message: "recette créée", id: result.insertId });
+    return res
+      .status(201)
+      .json({ message: "recette créée", id: result.insertId });
   } catch (err) {
     return handleServerError(res, err);
   }
@@ -92,7 +95,10 @@ exports.like = async (req, res) => {
 
   try {
     // Empêcher les doublons (un like par user/recette)
-    await pool.query("INSERT IGNORE INTO recipe_likes (user_id, recipe_id) VALUES (?, ?)", [userId, recipeId]);
+    await pool.query(
+      "INSERT IGNORE INTO recipe_likes (user_id, recipe_id) VALUES (?, ?)",
+      [userId, recipeId]
+    );
     return res.status(201).json({ message: "like ajouté" });
   } catch (err) {
     return handleServerError(res, err);
@@ -105,7 +111,10 @@ exports.unlike = async (req, res) => {
   const recipeId = req.params.id;
 
   try {
-    await pool.query("DELETE FROM recipe_likes WHERE user_id = ? AND recipe_id = ?", [userId, recipeId]);
+    await pool.query(
+      "DELETE FROM recipe_likes WHERE user_id = ? AND recipe_id = ?",
+      [userId, recipeId]
+    );
     return res.json({ message: "like retiré" });
   } catch (err) {
     return handleServerError(res, err);
@@ -118,10 +127,10 @@ exports.isLiked = async (req, res) => {
   const recipeId = req.params.id;
 
   try {
-    const [rows] = await pool.query("SELECT 1 FROM recipe_likes WHERE user_id = ? AND recipe_id = ? LIMIT 1", [
-      userId,
-      recipeId,
-    ]);
+    const [rows] = await pool.query(
+      "SELECT 1 FROM recipe_likes WHERE user_id = ? AND recipe_id = ? LIMIT 1",
+      [userId, recipeId]
+    );
     return res.json({ liked: rows.length > 0 });
   } catch (err) {
     return handleServerError(res, err);

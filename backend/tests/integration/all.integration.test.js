@@ -49,7 +49,9 @@ describe("Tests d'intégration", () => {
     });
 
     test("PATCH /auth/me sans token -> 401", async () => {
-      const res = await request(app).patch("/auth/me").send({ username: "NewName" });
+      const res = await request(app)
+        .patch("/auth/me")
+        .send({ username: "NewName" });
       expect(res.status).toBe(401);
     });
   });
@@ -359,4 +361,3 @@ describe("Tests d'intégration", () => {
     });
   });
 });
-

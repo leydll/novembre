@@ -3,7 +3,10 @@ const router = express.Router();
 const recipesController = require("../controllers/recipesController");
 const authMiddleware = require("../middlewares/authMiddleware"); // vérifie JWT
 const adminMiddleware = require("../middlewares/admin"); // vérifie rôle admin
-const { validateCreateRecipe, validateUpdateRecipe } = require("../middlewares/validators");
+const {
+  validateCreateRecipe,
+  validateUpdateRecipe,
+} = require("../middlewares/validators");
 const { validationResult } = require("express-validator");
 
 // Middleware générique pour renvoyer proprement les erreurs de validation
@@ -27,8 +30,27 @@ router.delete("/:id/like", authMiddleware, recipesController.unlike);
 router.get("/:id", recipesController.getOne);
 
 // Routes admin
-router.post("/", authMiddleware, adminMiddleware, validateCreateRecipe, handleValidation, recipesController.create);
-router.patch("/:id", authMiddleware, adminMiddleware, validateUpdateRecipe, handleValidation, recipesController.update);
-router.delete("/:id", authMiddleware, adminMiddleware, recipesController.delete);
+router.post(
+  "/",
+  authMiddleware,
+  adminMiddleware,
+  validateCreateRecipe,
+  handleValidation,
+  recipesController.create
+);
+router.patch(
+  "/:id",
+  authMiddleware,
+  adminMiddleware,
+  validateUpdateRecipe,
+  handleValidation,
+  recipesController.update
+);
+router.delete(
+  "/:id",
+  authMiddleware,
+  adminMiddleware,
+  recipesController.delete
+);
 
 module.exports = router;
