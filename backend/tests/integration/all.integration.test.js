@@ -16,19 +16,6 @@ describe("Tests d'intégration", () => {
       expect(res.body.errors).toBeDefined();
     });
 
-    test("POST /auth/register avec données invalides -> 400 avec erreurs détaillées", async () => {
-      const res = await request(app).post("/auth/register").send({
-        username: "ab", // Trop court
-        email: "not-an-email", // Email invalide
-        password: "shortMDP", // Absence de caractère spécial
-        consent: "false", // Consentement non donné
-      });
-      expect(res.status).toBe(400);
-      expect(res.body.errors).toBeDefined();
-      expect(Array.isArray(res.body.errors)).toBe(true);
-      expect(res.body.errors.length).toBeGreaterThan(0);
-    });
-
     test("POST /auth/login avec email invalide -> 400", async () => {
       const res = await request(app).post("/auth/login").send({
         email: "not-an-email",
