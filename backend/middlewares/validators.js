@@ -20,11 +20,24 @@ exports.validateRegister = [
     .isLength({ min: 12 })
     .withMessage("Le mot de passe doit faire au moins 12 caractères")
     .custom((value) => {
+      /**
+       * validation de la complexité du mot de passe
+       *
+       * le but est de forcer l'utilisation de mots de passe robustes pour réduire les risques de compromission par force brute ou dictionnaire.
+       *
+       * on vérifie la présence d'au moins 3 types de caractères parmi 4 :
+       * - Majuscules (A-Z)
+       * - Minuscules (a-z)
+       * - Chiffres (0-9)
+       * - Caractères spéciaux (tout ce qui n'est pas alphanumérique)
+       */
+      
       const Maj = /[A-Z]/.test(value);
       const Min = /[a-z]/.test(value);
       const Numero = /[0-9]/.test(value);
       const Special = /[^A-Za-z0-9]/.test(value);
       const types = [Maj, Min, Numero, Special].filter(Boolean).length;
+
       if (types < 3) {
         throw new Error(
           "Le mot de passe doit contenir au moins 3 types de caractères (majuscule, minuscule, chiffre, spécial)"
@@ -57,6 +70,8 @@ exports.validateUpdateProfile = [
     .isLength({ min: 12 })
     .withMessage("Le mot de passe doit faire au moins 12 caractères")
     .custom((value) => {
+      // Si le mot de passe n'est pas fourni, on accepte (champ optionnel)
+      // Sinon, on applique la même validation de complexité que pour l'inscription
       if (!value) return true;
       const Maj = /[A-Z]/.test(value);
       const Min = /[a-z]/.test(value);

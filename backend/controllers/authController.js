@@ -20,7 +20,14 @@ exports.register = async (req, res) => {
       return res.status(400).json({ message: "Email déjà existant" });
     }
 
-    // Hasher le mot de passe
+    /**
+     * Hachage du mot de passe avec bcrypt
+     *
+     * le but est de ne jamais stocker les mots de passe en clair en base de données.
+     * bcrypt génère automatiquement un salt unique pour chaque mot de passe, ce qui rend les attaques par rainbow table inefficaces.
+     *
+     * Plus élevé = plus sécurisé mais plus lent. 10 est un bon compromis.
+     */
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Créer l'utilisateur
@@ -80,6 +87,15 @@ exports.login = async (req, res) => {
     }
 
     const user = users[0];
+    /**
+     * Comparaison sécurisée du mot de passe
+     *
+     * le but est de vérifier le mot de passe sans le stocker en clair.
+     * bcrypt.compare() compare le mot de passe en clair avec le hash stocké.
+     * Elle gère automatiquement l'extraction depuis le hash.
+     *
+     * On ne révèle pas si l'email existe ou si seul le mot de passe est incorrect.
+     */
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res
