@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import PropTypes from "prop-types";
 import api from "../services/api"; // correspond à export default
 
 export default function Login({ setUser }) {
@@ -55,3 +56,7 @@ export default function Login({ setUser }) {
     </main>
   );
 }
+
+Login.propTypes = {
+  setUser: PropTypes.func.isRequired,
+};

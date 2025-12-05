@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import PropTypes from "prop-types";
 import api from "../services/api";
 
 export default function Register({ setUser }) {
@@ -87,3 +88,7 @@ export default function Register({ setUser }) {
     </main>
   );
 }
+
+Register.propTypes = {
+  setUser: PropTypes.func.isRequired,
+};

@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 
 export default function RecipeCard({
   recipe,
@@ -37,3 +38,14 @@ export default function RecipeCard({
     </article>
   );
 }
+
+RecipeCard.propTypes = {
+  recipe: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    title: PropTypes.string,
+    image: PropTypes.string,
+    likes_count: PropTypes.number,
+  }).isRequired,
+  titleLevel: PropTypes.string,
+  secondaryBadge: PropTypes.string,
+};

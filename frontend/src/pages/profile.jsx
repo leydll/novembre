@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import PropTypes from "prop-types";
 import api from "../services/api";
 
 export default function Profile({ user, setUser }) {
@@ -263,6 +264,7 @@ export default function Profile({ user, setUser }) {
         <form onSubmit={handleSubmit}>
           <label>
             Nom d&apos;utilisateur
+            {" "}
             <input
               type="text"
               value={username}
@@ -273,6 +275,7 @@ export default function Profile({ user, setUser }) {
 
           <label>
             Email
+            {" "}
             <input
               type="email"
               value={email}
@@ -283,6 +286,7 @@ export default function Profile({ user, setUser }) {
 
           <label>
             Nouveau mot de passe (optionnel)
+            {" "}
             <input
               type="password"
               value={password}
@@ -892,3 +896,13 @@ export default function Profile({ user, setUser }) {
     </main>
   );
 }
+
+Profile.propTypes = {
+  user: PropTypes.shape({
+    id: PropTypes.number,
+    username: PropTypes.string,
+    email: PropTypes.string,
+    role: PropTypes.string,
+  }).isRequired,
+  setUser: PropTypes.func.isRequired,
+};

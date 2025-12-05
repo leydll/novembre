@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 import api from "../services/api";
 import RecipeCard from "../components/RecipeCard";
 
@@ -109,3 +110,11 @@ export default function Recipes({ user }) {
     </main>
   );
 }
+
+Recipes.propTypes = {
+  user: PropTypes.shape({
+    id: PropTypes.number,
+    username: PropTypes.string,
+    role: PropTypes.string,
+  }),
+};

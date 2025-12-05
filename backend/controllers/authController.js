@@ -192,7 +192,7 @@ exports.deleteUser = async (req, res) => {
 
   try {
     // Empêcher la suppression de soi-même
-    if (parseInt(userId) === req.user.id) {
+    if (Number.parseInt(userId) === req.user.id) {
       return res
         .status(400)
         .json({ message: "Vous ne pouvez pas supprimer votre propre compte" });

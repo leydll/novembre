@@ -1,4 +1,5 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import PropTypes from "prop-types";
 import api from "../services/api";
 
 export default function Navbar({ user, setUser }) {
@@ -97,3 +98,12 @@ export default function Navbar({ user, setUser }) {
     </>
   );
 }
+
+Navbar.propTypes = {
+  user: PropTypes.shape({
+    id: PropTypes.number,
+    username: PropTypes.string,
+    role: PropTypes.string,
+  }),
+  setUser: PropTypes.func.isRequired,
+};
